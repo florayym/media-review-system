@@ -1,0 +1,15 @@
+{
+  "name": "media-review-system",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Qifei Yu",
+  "license": "ISC",
+  "dependencies": {
+    "react-file-viewer": "^1.2.1",
+    "react-read-pdf": "^2.0.9"
+  }
+}
