@@ -9,4 +9,8 @@ import NavBar from './NavBar'
 
 import LoginForm from './LoginForm'
 
-export { Links, Logo, NavBar, LoginForm }
+import MyTable from './MyTable'
+import Dashboard from './dashboard/Dashboard'
+
+
+export { Links, Logo, NavBar, LoginForm, MyTable, Dashboard }

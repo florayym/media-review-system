@@ -7,6 +7,8 @@
 
 const mongoose = require('mongoose')
 
+{/** Should the names of each field be changed accordingly? */}
+
 module.exports = new mongoose.Schema(
     {
         name: { type: String, required: true} // unique?(folder_path/name)
