@@ -1,3 +1,4 @@
 # meida-review-system
+<kbd>[**Getting started**](#getting-started)</kbd>
 
-* An <kbd>[**EFFICIENT**](#quick-start)</kbd> way to setup. ⦙⦙⦙
+Host ⦙ Web server ⦙ Application ⦙
