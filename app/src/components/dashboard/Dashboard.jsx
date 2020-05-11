@@ -21,7 +21,7 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import { mainListItems, secondaryListItems } from './listItems';
 import Chart from './Chart';
 import Deposits from './Deposits';
-import Orders from './Orders';
+import Reviewers from './Reviewers';
 
 function Copyright() {
   return (
@@ -143,7 +143,7 @@ export default function Dashboard() {
             <MenuIcon />
           </IconButton>
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            Dashboard
+            媒体资料管理系统
           </Typography>
           <IconButton color="inherit">
             <Badge badgeContent={4} color="secondary">
@@ -185,10 +185,11 @@ export default function Dashboard() {
                 <Deposits />
               </Paper>
             </Grid>
-            {/* Recent Orders */}
+            {/* Reviewer Management */}
             <Grid item xs={12}>
               <Paper className={classes.paper}>
-                <Orders />
+                {/* Table */}
+                <Reviewers />
               </Paper>
             </Grid>
           </Grid>

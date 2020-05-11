@@ -3,10 +3,12 @@ import '../App.css';
 
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { NavBar, MyTable } from '../components'
-import { MediasList, MediasInsert, MediasUpdate, Home, Login, Upload } from '../pages'
+import { MediasList, MediasInsert, MediasUpdate, Home, Login, Upload, TestDB } from '../pages'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
-function App() {
+//function App() {
+// ES6:
+const App = () => {
   return (
     <div className="App">
       <Router>
@@ -28,6 +30,8 @@ function App() {
          * <a href="http://www.example.com/">Home</a>
          */}
           <Route path="/" exact component={Home} />
+
+          <Route path="/testdb" exact component={TestDB} />
 
           {/** For testing tables */}
           <Route path="/medias/list" exact component={MyTable} />
