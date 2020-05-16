@@ -25,19 +25,19 @@ const Delete = styled.div`
 `
 
 class UpdateMedia extends Component {
-    updateUser = event => {
+    updateReviewer = event => {
         event.preventDefault()
 
         window.location.href = `/medias/update/${this.props.id}`
     }
 
     render() {
-        return <Update onClick={this.updateUser}>Update</Update>
+        return <Update onClick={this.updateReviewer}>Update</Update>
     }
 }
 
 class DeleteMedia extends Component {
-    deleteUser = event => {
+    deleteReviewer = event => {
         event.preventDefault()
 
         if (
@@ -51,7 +51,7 @@ class DeleteMedia extends Component {
     }
 
     render() {
-        return <Delete onClick={this.deleteUser}>Delete</Delete>
+        return <Delete onClick={this.deleteReviewer}>Delete</Delete>
     }
 }
 

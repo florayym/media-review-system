@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
-const mediaSchema = require('../schemas/media')
+import mongoose from 'mongoose';
+import mediaSchema from '../schemas/media.js';
 
-module.exports = mongoose.model('Media', mediaSchema);
+export default mongoose.model('mediaInfo', mediaSchema);

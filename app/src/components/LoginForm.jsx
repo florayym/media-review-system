@@ -49,7 +49,7 @@ class LoginForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: '',
+      id: '',
       password: '',
       usertype: 'junior',
     }
@@ -68,7 +68,7 @@ class LoginForm extends Component {
   }
 
   validateForm() {
-    return this.state.username.length > 0 && this.state.password.length > 0;
+    return this.state.id.length > 0 && this.state.password.length > 0;
   }
 
   onSubmit = e => {
@@ -78,7 +78,7 @@ class LoginForm extends Component {
 
     this.props.onSubmit(this.state);
     this.setState({
-      username: '',
+      id: '',
       password: '',
       usertype: 'junior',
     });
@@ -95,12 +95,12 @@ class LoginForm extends Component {
           <form>
 
             <p>[delete this] In this page you'll login to auditor's inner working page.</p>
-            <label htmlFor="username">工号：</label>
+            <label htmlFor="id">工号：</label>
             <Input
               type="text"
-              id="username"
+              id="id"
               placeholder="请输入工号"
-              value={this.state.username}
+              value={this.state.id}
               onChange={e => this.change(e)}
             />
             <br />
@@ -146,7 +146,7 @@ class LoginForm extends Component {
 }
 
 LoginForm.propTypes = {
-  username: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
   password: PropTypes.string.isRequired,
 }
 

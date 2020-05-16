@@ -1,12 +1,15 @@
-const express = require('express');
-const MediaCtrl = require('../controllers/media-ctrl');
+/**
+ * Create REST endpoints
+ */
+import express from 'express';
+import media_ctrl from '../controllers/media-ctrl.js'; // { createMedia, updateMedia, deleteMedia, getMediaById, getMedias }
 
 const router = express.Router();
 
-router.post('/media', MediaCtrl.createMedia)
-router.put('/media/:id', MediaCtrl.updateMedia)
-router.delete('/media/:id', MediaCtrl.deleteMedia)
-router.get('/media/:id', MediaCtrl.getMediaById)
-router.get('/medias', MediaCtrl.getMedias)
+router.get('/:id', media_ctrl.getMediaById);
+router.get('/', media_ctrl.getMedia); // /medias
+router.post('/', media_ctrl.createMedia); // /media
+router.put('/:id', media_ctrl.updateMedia);
+router.delete('/:id', media_ctrl.deleteMedia);
 
-module.exports = router
+export default router;

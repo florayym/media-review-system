@@ -1,17 +1,20 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+import createError from 'http-errors';
+import express from 'express'; // { json, urlencoded, static }
+import path from 'path'; // { join }
+import cookieParser from 'cookie-parser';
+import logger from 'morgan';
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/user');
+import indexRouter from './routes/index.js';
+import reviewersRouter from './routes/reviewer.js';
+import mediaRouter from './routes/media.js';
+import historyRouter from './routes/history.js';
+//import downloadRouter from './routes/download.js';
 
-//const mediaRouter = require('./routes/media')
+import db from './db/index.js';
 
-const db = require('./db')
+const app = express();
 
-var app = express();
+const __dirname = path.resolve(path.dirname(''));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -24,9 +27,10 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
-
-//app.use('/api', mediaRouter);
+app.use('/api/reviewers', reviewersRouter);
+app.use('/api/media', mediaRouter);
+app.use('/api/history', historyRouter);
+//app.use('/api/download', downloadRouter);
 
 
 // catch 404 and forward to error handler
@@ -45,4 +49,4 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-module.exports = app;
+export default app;

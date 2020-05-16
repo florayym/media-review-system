@@ -27,8 +27,8 @@ function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
+      <Link color="inherit" href="https://github.com/florayym">
+        媒体资料审核
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -146,7 +146,7 @@ export default function Dashboard() {
             媒体资料管理系统
           </Typography>
           <IconButton color="inherit">
-            <Badge badgeContent={4} color="secondary">
+            <Badge badgeContent={1} color="secondary"> {/* 右上角提示消息数 */}
               <NotificationsIcon />
             </Badge>
           </IconButton>

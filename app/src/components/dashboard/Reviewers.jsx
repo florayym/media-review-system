@@ -48,9 +48,11 @@ const rows = [
   createData(24, 212.79),
 ];
 
+/*
 function preventDefault(event) {
   event.preventDefault();
 }
+*/
 
 /**
  * ! For styles
@@ -77,9 +79,9 @@ const useStyles = makeStyles((theme) => ({
     top: 20,
     width: 1,
   },
-  seeMore: {
-    marginTop: theme.spacing(3),
-  },
+  //seeMore: {
+  //  marginTop: theme.spacing(3),
+  //},
 }));
 
 const StyledTableCell = withStyles((theme) => ({
@@ -226,7 +228,7 @@ const EnhancedTableToolbar = (props) => {
         </Typography>
       ) : (
           <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
-            Nutrition
+            审核人员管理
           </Typography>
         )}
 
@@ -371,11 +373,13 @@ export default function Reviewers() {
           )}
         </TableBody>
       </Table>
+      {/*
       <div className={classes.seeMore}>
         <Link color="primary" href="#" onClick={preventDefault}>
           See more orders
         </Link>
       </div>
+      */}
       <TablePagination
         rowsPerPageOptions={[5, 10, 25]}
         component="div"
