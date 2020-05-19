@@ -27,36 +27,34 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 
 import api from '../../api';
 
-// Generate Order Data
-function createData(id, history) {
-  return { id, history };
+// Generate Reviewer Data
+function createData(reviewerID, progress, history) {
+  return { reviewerID, progress, history };
 }
 
-let reviewers_test = [];
-
 const reviewers = [ // rows
-  createData(0, 312.44),
-  createData(1, 866.99),
-  createData(2, 100.81),
-  createData(3, 654.39),
-  createData(4, 212.79),
-  createData(10, 312.44),
-  createData(11, 866.99),
-  createData(12, 100.81),
-  createData(13, 654.39),
-  createData(14, 212.79),
-  createData(20, 312.44),
-  createData(21, 866.99),
-  createData(22, 100.81),
-  createData(23, 654.39),
-  createData(24, 212.79),
+  createData(20, 312.44, 4.3),
+  createData(123, 654.39, 44.3),
+  createData(222, 100.8, 14.3),
+  createData(23, 654.3, 9),
+  createData(21, 866.99, 4.3),
+  createData(223, 654.3, 94.3),
+  createData(24, 212.79, 3),
+  createData(121, 866.9, 94.3),
+  createData(120, 312.444, 3),
+  createData(124, 212.7, 93),
+  createData(122, 100.814, 3),
+  createData(22, 100.81, 43),
+  createData(220, 312.4, 44.3),
+  createData(221, 866.99, 4.3),
+  createData(224, 212.794, 3),
 ];
 
-/*
+
 function preventDefault(event) {
   event.preventDefault();
 }
-*/
+
 
 /**
  * ! For styles
@@ -156,9 +154,10 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
-  { id: 'id', numeric: true, disablePadding: true, label: 'Junior Reviewer ID' },
-  { id: 'progress', numeric: true, disablePadding: false, label: 'Progress' },
-  { id: 'history', numeric: true, disablePadding: false, label: 'History' },
+  { id: 'id', numeric: true, disablePadding: false, label: 'No.' },
+  { id: 'reviewerID', numeric: false, disablePadding: true, label: 'Junior Reviewer ID' }, // id
+  { id: 'progress', numeric: false, disablePadding: true, label: 'In Process' },
+  { id: 'history', numeric: false, disablePadding: true, label: 'History' },
 ];
 
 /**
@@ -222,15 +221,14 @@ function EnhancedTableHead(props) {
         {headCells.map((headCell) => (
           <StyledTableCell
             key={headCell.id}
-            //align={headCell.numeric ? 'right' : 'left'}
-            align='center'
+            align="center"
             padding={headCell.disablePadding ? 'none' : 'default'}
             sortDirection={orderBy === headCell.id ? order : false}
           >
             <TableSortLabel
               active={orderBy === headCell.id}
               direction={orderBy === headCell.id ? order : 'asc'}
-              onClick={createSortHandler(headCell.id)}
+              onClick={headCell.id !== 'id' ? createSortHandler(headCell.id) : null}
             >
               {headCell.label}
               {orderBy === headCell.id ? (
@@ -246,7 +244,7 @@ function EnhancedTableHead(props) {
             indeterminate={numSelected > 0 && numSelected < rowCount}
             checked={rowCount > 0 && numSelected === rowCount}
             onChange={onSelectAllClick}
-            inputProps={{ 'aria-label': 'select all desserts' }}
+            inputProps={{ 'aria-label': 'select all reviewers' }}
           />
         </StyledTableCell>
       </TableRow>
@@ -267,45 +265,63 @@ EnhancedTableHead.propTypes = {
 /**
  * ! 获取数据
  */
-function useReviewerInfoFromDB() {
-  api.getAllReviewers().then(res => {
-    reviewers_test = res.data.data;
-    console.log(reviewers_test);
-  });
-  return reviewers_test;
-}
+// const useReviewerInfoDB = () => {
+//   let reviewers = [];
+//   api.getAllReviewers().then(res => {
+//     res.data.data.forEach((reviewer, index) => {
+//       if (reviewer['type'] === 'junior') {
+//         reviewers.push(createData(reviewer['ID'], '0/1'));
+//       }
+//     });
+//   });
+//   return reviewers;
+// }
 
 /**
  * ! render component
  */
 export default function EnhancedReviewerInfoTable() {
-  // ! Using hooks!
   const classes = useStyles();
   const [order, setOrder] = useState('asc');
-  const [orderBy, setOrderBy] = useState('id');
+  const [orderBy, setOrderBy] = useState('reviewerID');
   const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(0);
   const [dense, setDense] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  // me adding my rows & columns useState 调用顺序相关！
-  //const [reivewers, setReviewers] = useState(useReviewerInfoFromDB); // read from mongodb refierInfo collections
+  //const [reviewers, setReviewers] = useState(useReviewerInfoDB());
+  // self-defined hook, read from mongodb refierInfo collections
+  //let reviewers = useReviewerInfoDB();
 
-  const [data, setData] = useState(useReviewerInfoFromDB);
+  function useReviewerInfoDB() {
+    const [reviewers, setReviewers] = useState([]);
+    api.getAllReviewers().then(res => {
+      res.data.data.forEach((reviewer, index) => {
+        if (reviewer['type'] === 'junior') {
+          //reviewers.push(createData(reviewer['ID'], '0/1'));
+          setReviewers([...reviewers, createData(reviewer['ID'], '0/1')]);
+        }
+      });
+    });
+    return reviewers;
+  }
+
+  console.log(reviewers);
+
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
+    setOrder(isAsc ? 'desc' : 'asc'); // 取反
     setOrderBy(property);
   }
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = reviewers.map((n) => n.id);
+      const newSelecteds = reviewers.map((n) => n.reviewerID);
       setSelected(newSelecteds);
       return;
     }
-    setSelected([]);
+    setSelected([]); // discard all
   }
 
   const handleClick = (event, id) => {
@@ -346,7 +362,7 @@ export default function EnhancedReviewerInfoTable() {
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, reviewers.length - page * rowsPerPage);
 
   return (
-    <React.Fragment className={classes.root}>
+    <React.Fragment>
       {/* <Title>审核人员</Title> */}
       <EnhancedTableToolbar
         numSelected={selected.length}
@@ -371,31 +387,32 @@ export default function EnhancedReviewerInfoTable() {
           {stableSort(reviewers, getComparator(order, orderBy))
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             .map((row, index) => {
-              const isItemSelected = isSelected(row.id);
+              const isItemSelected = isSelected(row.reviewerID);
               const labelId = `enhanced-table-checkbox-${index}`;
 
               return (
-                <TableRow
+                <StyledTableRow
                   hover
-                  onClick={(event) => handleClick(event, row.id)}
+                  onClick={(event) => handleClick(event, row.reviewerID)}
                   role="checkbox"
                   aria-checked={isItemSelected}
                   tabIndex={-1}
-                  key={row.id}
+                  key={row.reviewerID}
                   selected={isItemSelected}
                 >
-                  <StyledTableCell component="th" id={labelId} scope="row" align="center" padding="none">
-                    {row.id}
+                  <StyledTableCell component="th" scope="row" id={labelId} align="center" padding="none">
+                    {index}
                   </StyledTableCell>
+                  <StyledTableCell align="center">{row.reviewerID}</StyledTableCell>
+                  <StyledTableCell align="center">{row.progress}</StyledTableCell>
                   <StyledTableCell align="center">{row.history}</StyledTableCell>
-                  <StyledTableCell />
                   <StyledTableCell padding="checkbox">
                     <Checkbox
                       checked={isItemSelected}
                       inputProps={{ 'aria-labelledby': labelId }}
                     />
                   </StyledTableCell>
-                </TableRow>
+                </StyledTableRow>
               );
             })}
           {emptyRows > 0 && (

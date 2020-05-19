@@ -2,7 +2,7 @@ import React from 'react';
 import '../App.css';
 
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
-import { NavBar, MyTable } from '../components';
+import { NavBar } from '../components';
 import { MediasList, MediasInsert, MediasUpdate, Home, Login, Upload, TestDB } from '../pages';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import decode from 'jwt-decode';
@@ -66,7 +66,7 @@ const App = () => {
           <AuthRoute exact path="/dashboard" component={TestDB} />
 
           {/** For testing tables */}
-          <Route path="/medias/list" exact component={MyTable} />
+          {/* <Route path="/medias/list" exact component={MyTable} /> */}
 
           <Route path="/medias/list" exact component={MediasList} />
           <Route path="/medias/create" exact component={MediasInsert} />

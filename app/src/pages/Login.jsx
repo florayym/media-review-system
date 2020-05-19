@@ -40,11 +40,11 @@ export default () => {
 
   let history = useHistory(); // to access history
 
-  {/* <Redirect to={{
-            pathname: '/order',
-            state: { id: '123' } // To access: props.location.state.id
-        }}
-/> */}
+  // <Redirect to={{
+  //   pathname: '/order',
+  //   state: { id: '123' } // To access: props.location.state.id
+  // }}
+  // />
 
   //let { from } = location.state || { from: { pathname: "/" } };
   const { from } = { from: { pathname: "/" } } //auth/dashboard

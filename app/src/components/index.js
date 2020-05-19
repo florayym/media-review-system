@@ -9,8 +9,8 @@ import NavBar from './NavBar';
 
 import LoginForm from './LoginForm';
 
-import MyTable from './MyTable';
+// import MyTable from './MyTable';
 import Dashboard from './dashboard/Dashboard';
 import SignIn from './SignIn';
 
-export { Links, Logo, NavBar, LoginForm, MyTable, Dashboard, SignIn };
+export { Links, Logo, NavBar, LoginForm, Dashboard, SignIn };
