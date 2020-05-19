@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from '@material-ui/core/Link';
 import { lighten, withStyles, makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -7,10 +7,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Title from './Title';
-
-import TableContainer from '@material-ui/core/TableContainer';
 import Paper from '@material-ui/core/Paper';
-
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import TablePagination from '@material-ui/core/TablePagination';
@@ -27,34 +24,9 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 
 import api from '../../api';
 
-// Generate Reviewer Data
-function createData(reviewerID, progress, history) {
-  return { reviewerID, progress, history };
-}
-
-const reviewers = [ // rows
-  createData(20, 312.44, 4.3),
-  createData(123, 654.39, 44.3),
-  createData(222, 100.8, 14.3),
-  createData(23, 654.3, 9),
-  createData(21, 866.99, 4.3),
-  createData(223, 654.3, 94.3),
-  createData(24, 212.79, 3),
-  createData(121, 866.9, 94.3),
-  createData(120, 312.444, 3),
-  createData(124, 212.7, 93),
-  createData(122, 100.814, 3),
-  createData(22, 100.81, 43),
-  createData(220, 312.4, 44.3),
-  createData(221, 866.99, 4.3),
-  createData(224, 212.794, 3),
-];
-
-
 function preventDefault(event) {
   event.preventDefault();
 }
-
 
 /**
  * ! For styles
@@ -153,12 +125,20 @@ function stableSort(array, comparator) {
   return stabilizedThis.map((el) => el[0]);
 }
 
+/**
+ * ! Table data format
+ */
 const headCells = [
   { id: 'id', numeric: true, disablePadding: false, label: 'No.' },
   { id: 'reviewerID', numeric: false, disablePadding: true, label: 'Junior Reviewer ID' }, // id
   { id: 'progress', numeric: false, disablePadding: true, label: 'In Process' },
   { id: 'history', numeric: false, disablePadding: true, label: 'History' },
 ];
+
+// Generate Reviewer Data
+function createData(reviewerID, progress, history) {
+  return { reviewerID, progress, history };
+}
 
 /**
  * ! 工具栏
@@ -263,25 +243,11 @@ EnhancedTableHead.propTypes = {
 };
 
 /**
- * ! 获取数据
- */
-// const useReviewerInfoDB = () => {
-//   let reviewers = [];
-//   api.getAllReviewers().then(res => {
-//     res.data.data.forEach((reviewer, index) => {
-//       if (reviewer['type'] === 'junior') {
-//         reviewers.push(createData(reviewer['ID'], '0/1'));
-//       }
-//     });
-//   });
-//   return reviewers;
-// }
-
-/**
  * ! render component
  */
 export default function EnhancedReviewerInfoTable() {
   const classes = useStyles();
+  const [reviewers, setReviewers] = useState([]);
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('reviewerID');
   const [selected, setSelected] = useState([]);
@@ -289,25 +255,23 @@ export default function EnhancedReviewerInfoTable() {
   const [dense, setDense] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  //const [reviewers, setReviewers] = useState(useReviewerInfoDB());
-  // self-defined hook, read from mongodb refierInfo collections
-  //let reviewers = useReviewerInfoDB();
-
-  function useReviewerInfoDB() {
-    const [reviewers, setReviewers] = useState([]);
-    api.getAllReviewers().then(res => {
-      res.data.data.forEach((reviewer, index) => {
-        if (reviewer['type'] === 'junior') {
-          //reviewers.push(createData(reviewer['ID'], '0/1'));
-          setReviewers([...reviewers, createData(reviewer['ID'], '0/1')]);
-        }
+  useEffect(() => {
+    // ! Async Action
+    let data = [];
+    api.getAllReviewers().then(
+      (res) => {
+        res.data.data.forEach((reviewer, index) => {
+          console.log('index=' + index);
+          if (reviewer['type'] === 'junior') {
+            data.push(createData(reviewer['ID'], '0/1', '58'));
+          }
+        });
+        setReviewers(data);
+      },
+      (err) => {
+        console.log(err);
       });
-    });
-    return reviewers;
-  }
-
-  console.log(reviewers);
-
+  }, []); // If dependencies present, effect will only activate if the values in the list change.
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -388,7 +352,7 @@ export default function EnhancedReviewerInfoTable() {
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             .map((row, index) => {
               const isItemSelected = isSelected(row.reviewerID);
-              const labelId = `enhanced-table-checkbox-${index}`;
+              const labelId = `enhanced-table-checkbox-${index + 1}`;
 
               return (
                 <StyledTableRow
@@ -401,7 +365,7 @@ export default function EnhancedReviewerInfoTable() {
                   selected={isItemSelected}
                 >
                   <StyledTableCell component="th" scope="row" id={labelId} align="center" padding="none">
-                    {index}
+                    {index + 1}
                   </StyledTableCell>
                   <StyledTableCell align="center">{row.reviewerID}</StyledTableCell>
                   <StyledTableCell align="center">{row.progress}</StyledTableCell>

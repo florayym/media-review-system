@@ -27,7 +27,9 @@ const getReviewerById = async (req, res) => {
   /* Query by ID or any other field possible */
   await Reviewer.findOne({ ID: req.params.id }, (err, reviewer) => { // the schema field name is case sensitive
     if (err) {
-      return res.status(400).json({ success: false, error: err });
+      return res
+        .status(400)
+        .json({ success: false, error: err });
     }
 
     if (!reviewer) {
@@ -35,7 +37,9 @@ const getReviewerById = async (req, res) => {
         .status(404)
         .json({ success: false, error: `Reviewer not found.` });
     }
-    return res.status(200).json({ success: true, data: reviewer })
+    return res
+    .status(200)
+    .json({ success: true, data: reviewer })
   }).catch(err => console.log(err));
 };
 
@@ -51,7 +55,9 @@ const getAllReviewers = async (req, res) => {
         .status(404)
         .json({ success: false, error: `Reviewers not found.` });
     }
-    return res.status(200).json({ success: true, data: reviewers });
+    return res
+      .status(200)
+      .json({ success: true, data: reviewers });
   }).catch(err => console.log(err));
 };
 
@@ -59,10 +65,12 @@ const addReviewer = (req, res) => {
   const body = req.body;
 
   if (!body) {
-    return res.status(400).json({
-      success: false,
-      error: `You must provide a reviewer info!`,
-    });
+    return res
+      .status(400)
+      .json({
+        success: false,
+        error: `You must provide a reviewer info!`,
+      });
   }
 
   const reviewer = new Reviewer(body);
@@ -137,6 +145,7 @@ const reviewerLogin = (req, res) => {
           const token = jwt.sign(payload, config.secret, { expiresIn: config.tokenLife });
           const refreshToken = jwt.sign(payload, config.refreshTokenSecret, { expiresIn: config.refreshTokenLife });
 
+          // Set cookies
           res
             .status(200)
             // cookie CORS problem ??????
