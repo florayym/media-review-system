@@ -25,12 +25,16 @@ import Switch from '@material-ui/core/Switch';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 
+import api from '../../api';
+
 // Generate Order Data
 function createData(id, history) {
   return { id, history };
 }
 
-const rows = [
+let reviewers_test = [];
+
+const reviewers = [ // rows
   createData(0, 312.44),
   createData(1, 866.99),
   createData(2, 100.81),
@@ -86,7 +90,7 @@ const useStyles = makeStyles((theme) => ({
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
-    backgroundColor: theme.palette.common.black,
+    backgroundColor: theme.palette.primary.main,
     color: theme.palette.common.white,
   },
   body: {
@@ -101,6 +105,26 @@ const StyledTableRow = withStyles((theme) => ({
     },
   },
 }))(TableRow);
+
+const useToolbarStyles = makeStyles((theme) => ({
+  root: {
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(1),
+  },
+  highlight:
+    theme.palette.type === 'light'
+      ? {
+        color: theme.palette.secondary.main,
+        backgroundColor: lighten(theme.palette.secondary.light, 0.85),
+      }
+      : {
+        color: theme.palette.text.primary,
+        backgroundColor: theme.palette.secondary.dark,
+      },
+  title: {
+    flex: '1 1 100%',
+  },
+}));
 
 /**
  * ! For functional table operations
@@ -137,6 +161,55 @@ const headCells = [
   { id: 'history', numeric: true, disablePadding: false, label: 'History' },
 ];
 
+/**
+ * ! 工具栏
+ * @param {*} props 
+ */
+const EnhancedTableToolbar = (props) => {
+  const classes = useToolbarStyles();
+  const { numSelected } = props;
+
+  return (
+    <Toolbar
+      className={clsx(classes.root, {
+        [classes.highlight]: numSelected > 0,
+      })}
+    >
+      {numSelected > 0 ? (
+        <Typography className={classes.title} color="inherit" variant="subtitle1" component="div">
+          {numSelected} selected
+        </Typography>
+      ) : (
+          <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
+            分配审核任务
+          </Typography>
+        )}
+
+      {numSelected > 0 ? (
+        <Tooltip title="Delete">
+          <IconButton aria-label="delete">
+            <DeleteIcon />
+          </IconButton>
+        </Tooltip>
+      ) : (
+          <Tooltip title="Filter list">
+            <IconButton aria-label="filter list">
+              <FilterListIcon />
+            </IconButton>
+          </Tooltip>
+        )}
+    </Toolbar>
+  );
+};
+
+EnhancedTableToolbar.propTypes = {
+  numSelected: PropTypes.number.isRequired,
+};
+
+/**
+ * ! 表格头部
+ * @param {*} props 
+ */
 function EnhancedTableHead(props) {
   const { classes, onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
   const createSortHandler = (property) => (event) => {
@@ -161,8 +234,7 @@ function EnhancedTableHead(props) {
             >
               {headCell.label}
               {orderBy === headCell.id ? (
-                //<span className={classes.visuallyHidden}>
-                <span>
+                <span className={classes.visuallyHidden}>
                   {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
                 </span>
               ) : null}
@@ -192,71 +264,22 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
 };
 
-const useToolbarStyles = makeStyles((theme) => ({
-  root: {
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(1),
-  },
-  highlight:
-    theme.palette.type === 'light'
-      ? {
-        color: theme.palette.secondary.main,
-        backgroundColor: lighten(theme.palette.secondary.light, 0.85),
-      }
-      : {
-        color: theme.palette.text.primary,
-        backgroundColor: theme.palette.secondary.dark,
-      },
-  title: {
-    flex: '1 1 100%',
-  },
-}));
-
-const EnhancedTableToolbar = (props) => {
-  const classes = useToolbarStyles();
-  const { numSelected } = props;
-
-  return (
-    <Toolbar
-      className={clsx(classes.root, {
-        [classes.highlight]: numSelected > 0,
-      })}
-    >
-      {numSelected > 0 ? (
-        <Typography className={classes.title} color="inherit" variant="subtitle1" component="div">
-          {numSelected} selected
-        </Typography>
-      ) : (
-          <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
-            审核人员管理
-          </Typography>
-        )}
-
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton aria-label="delete">
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      ) : (
-          <Tooltip title="Filter list">
-            <IconButton aria-label="filter list">
-              <FilterListIcon />
-            </IconButton>
-          </Tooltip>
-        )}
-    </Toolbar>
-  );
-};
-
-EnhancedTableToolbar.propTypes = {
-  numSelected: PropTypes.number.isRequired,
-};
+/**
+ * ! 获取数据
+ */
+function useReviewerInfoFromDB() {
+  api.getAllReviewers().then(res => {
+    reviewers_test = res.data.data;
+    console.log(reviewers_test);
+  });
+  return reviewers_test;
+}
 
 /**
  * ! render component
  */
-export default function Reviewers() {
+export default function EnhancedReviewerInfoTable() {
+  // ! Using hooks!
   const classes = useStyles();
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('id');
@@ -264,6 +287,11 @@ export default function Reviewers() {
   const [page, setPage] = useState(0);
   const [dense, setDense] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  // me adding my rows & columns useState 调用顺序相关！
+  //const [reivewers, setReviewers] = useState(useReviewerInfoFromDB); // read from mongodb refierInfo collections
+
+  const [data, setData] = useState(useReviewerInfoFromDB);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -273,7 +301,7 @@ export default function Reviewers() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.id);
+      const newSelecteds = reviewers.map((n) => n.id);
       setSelected(newSelecteds);
       return;
     }
@@ -315,11 +343,14 @@ export default function Reviewers() {
 
   const isSelected = (id) => selected.indexOf(id) !== -1;
 
-  const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+  const emptyRows = rowsPerPage - Math.min(rowsPerPage, reviewers.length - page * rowsPerPage);
 
   return (
     <React.Fragment className={classes.root}>
-      <Title>审核人员</Title>
+      {/* <Title>审核人员</Title> */}
+      <EnhancedTableToolbar
+        numSelected={selected.length}
+      />
       {/* <Table size="small"> */}
       <Table
         className={classes.table}
@@ -334,10 +365,10 @@ export default function Reviewers() {
           orderBy={orderBy}
           onSelectAllClick={handleSelectAllClick}
           onRequestSort={handleRequestSort}
-          rowCount={rows.length}
+          rowCount={reviewers.length}
         />
         <TableBody>
-          {stableSort(rows, getComparator(order, orderBy))
+          {stableSort(reviewers, getComparator(order, orderBy))
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             .map((row, index) => {
               const isItemSelected = isSelected(row.id);
@@ -357,6 +388,7 @@ export default function Reviewers() {
                     {row.id}
                   </StyledTableCell>
                   <StyledTableCell align="center">{row.history}</StyledTableCell>
+                  <StyledTableCell />
                   <StyledTableCell padding="checkbox">
                     <Checkbox
                       checked={isItemSelected}
@@ -383,7 +415,7 @@ export default function Reviewers() {
       <TablePagination
         rowsPerPageOptions={[5, 10, 25]}
         component="div"
-        count={rows.length}
+        count={reviewers.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onChangePage={handleChangePage}

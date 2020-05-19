@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import logo from '../logo.svg';
 
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
-import { TestDB } from '../pages'
+// import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+// import { TestDB } from '../pages'
 
 class Home extends Component {
   render() {
@@ -13,25 +13,23 @@ class Home extends Component {
           <h1>
             欢迎来到多媒体资料在线审核系统！
           </h1>
-          {/**
-          <a
+
+          {/* <a
             className="App-link"
             href="/upload"
             target="_blank"
             rel="noopener noreferrer"
           >
             Upload
-          </a>
-           */}
-           
-          <a target="_self" rel="noopener noreferrer" href="/testdb">Go to dashboard .</a>
-           <Router>
-          <Switch>
+          </a> */}
 
-            <Route path="/testdb" exact component={TestDB} />
 
-          </Switch>
-        </Router>
+          {/* <a target="_self" rel="noopener noreferrer" href="/testdb">Go to dashboard .</a>
+          <Router>
+            <Switch>
+              <Route path="/dashboard" exact component={TestDB} />
+            </Switch>
+          </Router> */}
 
         </header>
       </div>
@@ -39,4 +37,4 @@ class Home extends Component {
   }
 }
 
-export default Home
+export default Home;

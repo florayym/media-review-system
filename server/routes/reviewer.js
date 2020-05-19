@@ -5,7 +5,8 @@ import reviewer_ctrl from '../controllers/reviewer-ctrl.js';
 const router = express.Router();
 
 router.get('/:id', reviewer_ctrl.getReviewerById);
-router.get('/', reviewer_ctrl.getReviewers); // get all mush be /
+router.get('/', reviewer_ctrl.getAllReviewers); // get all mush be /
 router.post('/', reviewer_ctrl.addReviewer);
+router.post('/login', reviewer_ctrl.reviewerLogin);
 
 export default router;

@@ -13,7 +13,7 @@ const getHistoryByMediaId = async (req, res) => {
     if (!history) {
       return res
         .status(404)
-        .json({ success: false, error: `History not found` })
+        .json({ success: false, error: `History not found.` })
     }
     return res.status(200).json({ success: true, data: history })
   }).catch(err => console.log(err));
@@ -45,7 +45,7 @@ const getHistory = async (req, res) => {
     if (!history) { // empty
       return res
         .status(404)
-        .json({ success: false, error: 'History not found' });
+        .json({ success: false, error: `History not found.` });
     }
     return res.status(200).json({ success: true, data: history });
   }).catch(err => console.log(err));
@@ -57,7 +57,7 @@ const addHistory = (req, res) => {
   if (!body) {
     return res.status(400).json({
       success: false,
-      error: 'You must provide a history',
+      error: `You must provide a history!`,
     });
   }
 

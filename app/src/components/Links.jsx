@@ -20,7 +20,7 @@ class Links extends Component {
       <React.Fragment>
         <Link to="/" className="navbar-brand">
           媒体资料管理系统
-                </Link>
+        </Link>
         <Collapse>
           <List>
             <Item>
@@ -35,7 +35,7 @@ class Links extends Component {
               </Link>
             </Item>
             <Item>
-              <Link to="/login" className="nav-link">
+              <Link to="/dashboard" className="nav-link">
                 审核
               </Link>
             </Item>

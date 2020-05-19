@@ -3,3 +3,6 @@ node_modules
 
 # VS Code.
 .vscode
+
+# Secret Configuration.
+config.js

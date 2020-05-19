@@ -6,9 +6,9 @@ import media_ctrl from '../controllers/media-ctrl.js'; // { createMedia, updateM
 
 const router = express.Router();
 
-router.get('/:id', media_ctrl.getMediaById);
-router.get('/', media_ctrl.getMedia); // /medias
 router.post('/', media_ctrl.createMedia); // /media
+router.get('/', media_ctrl.getAllMedia); // /medias
+router.get('/:id', media_ctrl.getMediaById);
 router.put('/:id', media_ctrl.updateMedia);
 router.delete('/:id', media_ctrl.deleteMedia);
 

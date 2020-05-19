@@ -9,7 +9,7 @@ const createMedia = (req, res) => {
   if (!body) {
     return res.status(400).json({
       success: false,
-      error: 'You must provide a media',
+      error: `You must provide a media`,
     });
   }
 
@@ -44,7 +44,7 @@ const updateMedia = async (req, res) => {
   if (!body) {
     return res.status(400).json({
       success: false,
-      error: 'You must provide a body to update',
+      error: `You must provide a body to update`,
     });
   }
 
@@ -60,9 +60,6 @@ const updateMedia = async (req, res) => {
     media.type = body.type;
     media.path = body.path;
     //media.reviewHisotry = body.reviewHisotry;
-
-  console.log(media.reviewHisotry);
-
 
     media
       .save()
@@ -115,7 +112,7 @@ const getMediaById = async (req, res) => {
   }).catch(err => console.log(err));
 };
 
-const getMedia = async (req, res) => {
+const getAllMedia = async (req, res) => {
   await Media.find({}, (err, medias) => {
     if (err) {
       return res.status(400).json({ success: false, error: err });
@@ -134,6 +131,6 @@ export default {
   createMedia,
   updateMedia,
   deleteMedia,
-  getMedia,
+  getAllMedia,
   getMediaById,
 };
