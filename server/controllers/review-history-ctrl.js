@@ -7,7 +7,9 @@ const getHistoryByMediaId = async (req, res) => {
   /* Query by mediaID or any other field possible */
   await History.findOne({ mediaID: req.params.id }, (err, history) => { // the schema field name is case sensitive
     if (err) {
-      return res.status(400).json({ success: false, error: err })
+      return res
+        .status(400)
+        .json({ success: false, error: err })
     }
 
     if (!history) {
@@ -15,23 +17,45 @@ const getHistoryByMediaId = async (req, res) => {
         .status(404)
         .json({ success: false, error: `History not found.` })
     }
-    return res.status(200).json({ success: true, data: history })
+    return res
+      .status(200)
+      .json({ success: true, data: history })
   }).catch(err => console.log(err));
 };
 
 const getHistoryByReviewerId = async (req, res) => {
-  /* Query by ID or any other field possible */
-  await History.findOne({ reviewerID: req.params.id }, (err, history) => { // the schema field name is case sensitive
-    if (err) {
-      return res.status(400).json({ success: false, error: err })
-    }
 
-    if (!history) {
+  /* Query by ID <delete>or any other fields possible</delete> */
+
+  // ! only find (first) one
+  // await History.findOne({ reviewerID: req.params.id }, (err, history) => { // the schema field name is case sensitive
+  //   if (err) {
+  //     return res
+  //       .status(400)
+  //       .json({ success: false, error: err })
+  //   }
+
+  //   if (!history) {
+  //     return res
+  //       .status(404)
+  //       .json({ success: false, error: `History not found!` })
+  //   }
+  //   return res
+  //     .status(200)
+  //     .json({ success: true, data: history })
+  // }).catch(err => console.log(err));
+
+  // ! want to find(aggregate) all by reviewerID
+  await History.aggregate([
+    { "$match": { reviewerID: parseInt(req.params.id) } },
+  ], (err, history) => {
+    if (err) {
       return res
-        .status(404)
-        .json({ success: false, error: `History not found` })
+        .status(400)
+        .json({ success: false, error: err });
     }
-    return res.status(200).json({ success: true, data: history })
+    return res.status(200)
+      .json({ success: true, data: history });
   }).catch(err => console.log(err));
 };
 
@@ -47,7 +71,9 @@ const getHistory = async (req, res) => {
         .status(404)
         .json({ success: false, error: `History not found.` });
     }
-    return res.status(200).json({ success: true, data: history });
+    return res
+      .status(200)
+      .json({ success: true, data: history });
   }).catch(err => console.log(err));
 };
 
@@ -62,8 +88,6 @@ const addHistory = (req, res) => {
   }
 
   const history = new History(body);
-
-  console.log(history);
 
   if (!history) {
     return res.status(400).json({ success: false, error: err });

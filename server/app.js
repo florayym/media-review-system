@@ -38,7 +38,7 @@ app.use('/api/reviewers', reviewersRouter);
 
 app.use('/api/media', mediaRouter);
 
-app.use('/api/history', historyRouter); // withAuth
+app.use('/api/secure/history', historyRouter); // withAuth, 
 
 //app.use('/api/download', downloadRouter);
 

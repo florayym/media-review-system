@@ -16,14 +16,14 @@ export const updateMediaById = (id, payload) => api.put(`/media/${id}`, payload)
 export const deleteMediaById = id => api.delete(`/media/${id}`);
 
 export const addReviewer = payload => api.post(`/reviewers/`, payload);
-export const getAllReviewers = () => api.get('/reviewers/');
-export const getReviewerById = id => api.get(`/reviewers/${id}`);
+export const getAllReviewers = () => api.get('/reviewers/secure/');
+export const getReviewerById = id => api.get(`/reviewers/secure/${id}`);
 export const reviewerLogin = payload => api.post(`/reviewers/login`, payload);
 
-export const getHistoryByMediaId = id => api.get(`/history/media/${id}`);
-export const getHistoryByReviewerId = id => api.get(`/history/reviewer/${id}`);
-export const getHistory = () => api.get(`/history/all`);
-export const addHistory = payload => api.get(`/history/add`, payload);
+export const getHistoryByMediaId = id => api.get(`/secure/history/media/${id}`);
+export const getHistoryByReviewerId = id => api.get(`/secure/history/reviewer/${id}`);
+export const getHistory = () => api.get(`/secure/history/all`);
+export const addHistory = payload => api.get(`/secure/history/add`, payload);
 
 const apis = {
   insertMedia,

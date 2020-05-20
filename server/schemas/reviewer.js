@@ -6,21 +6,20 @@ mongoose.set('useCreateIndex', true); // fix warning: https://github.com/Automat
 const ReviewerSchema = new mongoose.Schema({
   ID: {
     type: Number,
-    required: [true, 'ReviewerID empty!'],
     unique: true,
     //index: true,
+    required: [true, 'ReviewerID empty!']
   },
   password: {
     type: String,
     //custom validation functions
-    //required: [true, 'Password empty!']
+    required: [true, 'Password empty!']
   },
   type: {
     type: String,
     enum: ['junior', 'senior'],
-    //lowercase: true,
     //trim: true,
-    //required: [true, 'User type empty!']
+    required: [true, 'User type empty!']
   }
 });
 
