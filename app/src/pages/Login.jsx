@@ -47,12 +47,12 @@ export default () => {
   // />
 
   //let { from } = location.state || { from: { pathname: "/" } };
-  const { from } = { from: { pathname: "/" } } //auth/dashboard
+  const { from } = { from: { pathname: "/" } }
 
   let onSubmit = (inputs) => {
     //e.preventDefault();
     authenticate(inputs, () => {
-      history.replace(from); // history.replace: 回不到上一级 适用于登录后，不需要重新回到登页面
+      history.replace(from); // 回不到上一级 适用于登录后，不需要重新回到登页面
       // history.push: 可以回到上一级, 适合navigate
     });
   };

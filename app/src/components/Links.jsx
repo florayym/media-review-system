@@ -35,7 +35,7 @@ class Links extends Component {
               </Link>
             </Item>
             <Item>
-              <Link to="/dashboard" className="nav-link">
+              <Link to="/se/dashboard" className="nav-link">
                 审核
               </Link>
             </Item>

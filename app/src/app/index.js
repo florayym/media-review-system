@@ -3,9 +3,11 @@ import '../App.css';
 
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import { NavBar } from '../components';
-import { MediasList, MediasInsert, MediasUpdate, Home, Login, Upload, TestDB } from '../pages';
+import { MediasList, MediasInsert, MediasUpdate, Home, Login, Upload, SeniorDashboard, Dashboard } from '../pages';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import decode from 'jwt-decode';
+
+/************* For other auth *************/
 
 const checkAuth = () => {
   const token = localStorage.getItem('token');
@@ -45,6 +47,54 @@ function AuthRoute({ component: Component, ...rest }) {
   );
 }
 
+/************* For senior user *************/
+
+const checkSeAuth = () => {
+  const token = localStorage.getItem('token');
+  const refreshToken = localStorage.getItem('refreshToken');
+  let useType = "junior";
+
+  if (!token || !refreshToken) { // has tokens?
+    return false;
+  }
+
+  try {
+    // get expiration time (in millseconds) from payload
+    const { exp, type } = decode(refreshToken); // can decode then no exception thrown
+    useType = type;
+
+    if (exp < new Date().getTime() / 1000) { // - 1000000000 for expire testing
+      return 0; // expired!
+    }
+
+  } catch (e) { // passed token is invalid!
+    return 0;
+  }
+
+  return useType === 'junior' ? 1 : 2;
+}
+
+// A wrapper for <Route> that redirects to the login
+// screen if you're not yet authenticated.
+function AuthSeRoute({ component: Component, ...rest }) {
+  return (
+    <Route {...rest} render={(props) =>
+      checkSeAuth() === 2 ? (
+        <Component {...props} /> // senior
+      ) : (
+          checkSeAuth() === 1 ? (
+            <Redirect to={{ pathname: "/dashboard" }} /> // junior
+          ) : (
+              <Redirect to={{ pathname: "/auth/login" }} /> // visitor
+            )
+        )
+    }
+    />
+  );
+}
+
+/************* For Application Main UI *************/
+
 //function App() {
 const App = () => {
   // let location = useLocation();
@@ -63,7 +113,9 @@ const App = () => {
           <Route path="/" exact component={Home} />
 
           {/* for testing dashboard */}
-          <AuthRoute exact path="/dashboard" component={TestDB} />
+          {/* For senior add "/se" */}
+          <AuthSeRoute exact path="/se/dashboard" component={SeniorDashboard} />
+          <AuthRoute exact path="/dashboard" component={Dashboard} />
 
           {/** For testing tables */}
           {/* <Route path="/medias/list" exact component={MyTable} /> */}

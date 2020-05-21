@@ -6,6 +6,7 @@ import Home from './Home';
 import Login from './Login';
 import Upload from './Upload';
 
-import TestDB from './DashboardPage';
+import SeniorDashboard from './SeDashboardPage';
+import Dashboard from './DashboardPage';
 
-export { MediasList, MediasInsert, MediasUpdate, Home, Login, Upload, TestDB };
+export { MediasList, MediasInsert, MediasUpdate, Home, Login, Upload, SeniorDashboard, Dashboard };

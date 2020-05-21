@@ -6,8 +6,8 @@ class MediasInsert extends Component {
             <div>
                 <p>In this page you'll see the form to add a medias</p>
             </div>
-        )
+        );
     }
 }
 
-export default MediasInsert
+export default MediasInsert;

@@ -1,15 +1,14 @@
 import React, { Component } from 'react'
-import Dashboard from '../components/dashboard/Dashboard'
+import DashboardComponent from '../components/dashboard/Dashboard'
 
-
-class TestDB extends Component {
+class Dashboard extends Component {
   render() {
     return (
       <div>
-        <Dashboard />
+        <DashboardComponent />
       </div>
-    )
+    );
   }
 }
 
-export default TestDB
+export default Dashboard;
