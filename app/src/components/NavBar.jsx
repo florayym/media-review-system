@@ -5,26 +5,26 @@ import Logo from './Logo'
 import Links from './Links'
 
 const Container = styled.div.attrs({
-    className: 'container',
-})``
+  className: 'container',
+})`
+`
 
 const Nav = styled.nav.attrs({
-    className: 'navbar navbar-expand-lg navbar-dark bg-dark',
+  className: 'navbar navbar-expand-lg navbar-dark bg-dark',
 })`
-    margin-bottom: 20 px;
 `
 
 class NavBar extends Component {
-    render() {
-        return (
-            <Container>
-                <Nav>
-                    <Logo />
-                    <Links />
-                </Nav>
-            </Container>
-        )
-    }
+  render() {
+    return (
+      <Container>
+        <Nav>
+          <Logo />
+          <Links />
+        </Nav>
+      </Container>
+    )
+  }
 }
 
-export default NavBar
+export default NavBar;

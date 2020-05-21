@@ -1,10 +1,8 @@
 import React from 'react';
-import '../App.css';
-
-import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
-import { NavBar } from '../components';
-import { MediasList, MediasInsert, MediasUpdate, Home, Login, Upload, SeniorDashboard, Dashboard } from '../pages';
+import '../css/App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
+import { MediasList, MediasInsert, MediasUpdate, Home, Login, Upload, SeniorDashboard, Dashboard } from '../pages';
 import decode from 'jwt-decode';
 
 /************* For other auth *************/
@@ -21,7 +19,7 @@ const checkAuth = () => {
     // get expiration time (in millseconds) from payload
     const { exp } = decode(refreshToken); // can decode then no exception thrown
 
-    if (exp < new Date().getTime() / 1000) { // - 1000000000 for expire testing
+    if (exp < new Date().getTime() / 1000) {
       return false; // expired!
     }
 
@@ -59,23 +57,20 @@ const checkSeAuth = () => {
   }
 
   try {
-    // get expiration time (in millseconds) from payload
-    const { exp, type } = decode(refreshToken); // can decode then no exception thrown
+    const { exp, type } = decode(refreshToken);
     useType = type;
 
-    if (exp < new Date().getTime() / 1000) { // - 1000000000 for expire testing
-      return 0; // expired!
+    if (exp < new Date().getTime() / 1000) {
+      return 0;
     }
 
-  } catch (e) { // passed token is invalid!
+  } catch (e) {
     return 0;
   }
 
   return useType === 'junior' ? 1 : 2;
 }
 
-// A wrapper for <Route> that redirects to the login
-// screen if you're not yet authenticated.
 function AuthSeRoute({ component: Component, ...rest }) {
   return (
     <Route {...rest} render={(props) =>
@@ -97,39 +92,31 @@ function AuthSeRoute({ component: Component, ...rest }) {
 
 //function App() {
 const App = () => {
-  // let location = useLocation();
 
-  //let { from } = location.state || { from: { pathname: "/" } };
   return (
     <div className="App">
+
       <Router>
-
-        <NavBar />
-
-        {/* A <Switch> looks through its children <Route>s and
+        <Switch> {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
-        <Switch>
-          {/* <Route path="/home" exact component={Home} /> */}
+          <Route path="/home" exact component={Home} />
           <Route path="/" exact component={Home} />
 
-          {/* for testing dashboard */}
-          {/* For senior add "/se" */}
-          <AuthSeRoute exact path="/se/dashboard" component={SeniorDashboard} />
-          <AuthRoute exact path="/dashboard" component={Dashboard} />
+          <AuthSeRoute path="/se/dashboard" exact component={SeniorDashboard} />
+          <AuthRoute path="/dashboard" exact component={Dashboard} />
+          <Route path="/auth/login" exact component={Login} />
 
-          {/** For testing tables */}
+          <Route path="/upload" exact component={Upload} />
+
           {/* <Route path="/medias/list" exact component={MyTable} /> */}
 
           <Route path="/medias/list" exact component={MediasList} />
           <Route path="/medias/create" exact component={MediasInsert} />
           <Route path="/medias/update/:id" exact component={MediasUpdate} />
 
-          <Route path="/upload" exact component={Upload} />
-          <Route path="/auth/login" exact component={Login} />
-
         </Switch>
-
       </Router>
+
     </div>
   );
 }

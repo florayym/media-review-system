@@ -1,6 +1,7 @@
-import React, { Component } from 'react'
-import FileViewer from 'react-file-viewer'
+import React, { Component } from 'react';
+import FileViewer from 'react-file-viewer';
 import { PDFReader } from 'react-read-pdf';
+import { NavBar } from '../components';
 
 class Upload extends Component {
   constructor(props) {
@@ -28,6 +29,8 @@ class Upload extends Component {
     return (
       <div>
 
+        <NavBar />
+
         <div class="line">选择一个媒体资源（最大500 MB）：</div>
         <form>
           <input type="file" name="media_upload" />
@@ -52,13 +55,13 @@ class Upload extends Component {
 
         <FileViewer
           fileType='pdf'//文件类型 png, jpeg, gif, bmp, including 360-degree images,   pdf csv xslx docx,   mp4 webm,   mp3
-          filePath='http://localhost:3006/pdftest.pdf' //文件地址
+          filePath='http://localhost:3006/media/pdftest.pdf' //文件地址
           onError={this.onError.bind(this)} //函数[可选]：当文件查看器在获取或呈现请求的资源时发生错误时将调用的函数。在这里可以传递日志记录实用程序的回调。
           errorComponent={console.log("出现错误")} //[可选]：发生错误时呈现的组件，而不是react-file-viewer随附的默认错误组件。
           unsupportedComponent={console.log("不支持")} //[可选]：在不支持文件格式的情况下呈现的组件。
         />
         <div style={{ overflow: 'scroll', height: 600 }}>
-          <PDFReader url="http://localhost:3006/pdftest.pdf" />
+          <PDFReader url="http://localhost:3006/media/pdftest.pdf" />
         </div>
       </div>
     );

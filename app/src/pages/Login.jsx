@@ -1,6 +1,5 @@
 import React from 'react'
 import { useHistory } from 'react-router-dom'
-import '../App.css';
 import SignIn from '../components/SignIn';
 import api from '../api';
 
@@ -58,7 +57,7 @@ export default () => {
   };
 
   return (
-    <div className="App">
+    <div>
       {/* <LoginForm onSubmit={fields => this.onSubmit(fields)} /> */}
       <SignIn onSubmit={inputs => onSubmit(inputs)} />
 
