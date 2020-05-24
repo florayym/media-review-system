@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "concurrently \"cd server & set DEBUG=server:* & npm start\" \"cd app && npm start\""
+    "server": "npm run dev --prefix server",
+    "client": "npm start --prefix app",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "repository": {
     "type": "git",
@@ -14,8 +16,6 @@
   "author": "Qifei Yu",
   "license": "ISC",
   "dependencies": {
-    "@material-ui/core": "^4.9.13",
-    "@material-ui/icons": "^4.9.1",
     "bcrypt": "^4.0.1",
     "body-parser": "^1.19.0",
     "concurrently": "^5.2.0",
@@ -24,8 +24,6 @@
     "formik": "^2.1.4",
     "jsonwebtoken": "^8.5.1",
     "jwt-decode": "^2.2.0",
-    "react-file-viewer": "^1.2.1",
-    "react-read-pdf": "^2.0.9",
     "recharts": "^1.8.5"
   }
 }

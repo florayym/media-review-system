@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import Link from '@material-ui/core/Link';
 import { lighten, withStyles, makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -399,7 +399,7 @@ export default function EnhancedReviewerInfoTable() {
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, reviewers.length - page * rowsPerPage);
 
   return (
-    <React.Fragment>
+    <Fragment>
       {/* <Title>审核人员</Title> */}
       <EnhancedTableToolbar
         numSelected={selected.length}
@@ -432,7 +432,7 @@ export default function EnhancedReviewerInfoTable() {
               const isItemOpened = isOpened(row.reviewerID);
 
               return (
-                <React.Fragment key={`display-row-${row.reviewerID}`}>
+                <Fragment key={`display-row-${row.reviewerID}`}>
                   <StyledTableRow
                     hover
                     // should not be active for the whole row
@@ -498,7 +498,7 @@ export default function EnhancedReviewerInfoTable() {
                       </Collapse>
                     </TableCell>
                   </TableRow>
-                </React.Fragment>
+                </Fragment>
               );
             })}
           {emptyRows > 0 && (
@@ -528,6 +528,6 @@ export default function EnhancedReviewerInfoTable() {
         control={<Switch checked={dense} onChange={handleChangeDense} />}
         label="Dense padding"
       />
-    </React.Fragment>
+    </Fragment>
   );
 }

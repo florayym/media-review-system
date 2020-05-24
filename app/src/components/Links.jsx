@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Fragment, Component } from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -17,14 +17,14 @@ const Item = styled.div.attrs({
 class Links extends Component {
   render() {
     return (
-      <React.Fragment>
+      <Fragment>
         <Link to="/" className="navbar-brand">
           媒体资料管理系统
         </Link>
         <Collapse>
           <List>
             <Item>
-              <Link to="/medias/list" className="nav-link">
+              <Link to="/gallery" className="nav-link">
                 浏览
               </Link>
             </Item>
@@ -41,7 +41,7 @@ class Links extends Component {
             </Item>
           </List>
         </Collapse>
-      </React.Fragment>
+      </Fragment>
     )
   }
 }

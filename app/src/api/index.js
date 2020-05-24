@@ -9,7 +9,7 @@ const api = axios.create({
   baseURL: 'http://localhost:3000/api',
 })
 
-export const insertMedia = payload => api.post(`/media/`, payload);
+export const uploadMedia = (payload, config) => api.post(`/media/`, payload, config);
 export const getAllMedia = () => api.get(`/media/`);
 export const getMediaById = id => api.get(`/media/${id}`);
 export const updateMediaById = (id, payload) => api.put(`/media/${id}`, payload);
@@ -26,20 +26,20 @@ export const getHistory = () => api.get(`/secure/history/all`);
 export const addHistory = payload => api.get(`/secure/history/add`, payload);
 
 const apis = {
-  insertMedia,
+
+  uploadMedia, // !
   getAllMedia,
   getMediaById,
   updateMediaById,
   deleteMediaById,
 
-  addReviewer,
-  getAllReviewers,
+  reviewerLogin, // !
+  getAllReviewers, // !
   getReviewerById,
+  addReviewer,
 
-  reviewerLogin,
-
+  getHistoryByReviewerId, // !
   getHistoryByMediaId,
-  getHistoryByReviewerId,
   getHistory,
   addHistory,
 }

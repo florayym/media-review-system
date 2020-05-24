@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { useTheme } from '@material-ui/core/styles';
 import { LineChart, Line, XAxis, YAxis, Label, ResponsiveContainer } from 'recharts';
 import Title from './Title';
@@ -24,7 +24,7 @@ export default function Chart() {
   const theme = useTheme();
 
   return (
-    <React.Fragment>
+    <Fragment>
       <Title>Today</Title>
       <ResponsiveContainer>
         <LineChart
@@ -49,6 +49,6 @@ export default function Chart() {
           <Line type="monotone" dataKey="amount" stroke={theme.palette.primary.main} dot={false} />
         </LineChart>
       </ResponsiveContainer>
-    </React.Fragment>
+    </Fragment>
   );
 }

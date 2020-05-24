@@ -1,41 +1,99 @@
 /**
  * CRUD operations
  */
-import Media from '../models/media.js'; // , { findOne, findOneAndDelete, find }
+import Media from '../models/media.js';
+import multer from 'multer';
 
-const createMedia = (req, res) => {
-  const body = req.body;
+/**
+const path = require("path");
+path.extname(file.originalname))
 
-  if (!body) {
-    return res.status(400).json({
-      success: false,
-      error: `You must provide a media`,
-    });
+ */
+
+const MAX_FILE_SIZE = 500 * 1024 * 1024;
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, './uploads'),
+  // filename: (req, file, cb) => cb(null, file.fieldname)
+  filename: (req, file, cb) => cb(null, Date.now() + '-' + file.originalname)
+});
+
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
+    cb(null, true);
+  } else {
+    cb("Type file is not access", false);
   }
+};
 
-  const media = new Media(body);
-
-  if (!media) {
-    return res.status(400).json({ success: false, error: err });
+let upload = multer({
+  storage: storage,
+  // fileFilter: fileFilter,
+  limits: {
+    // For multipart forms, the max file size (in bytes), can be Infinity
+    fileSize: MAX_FILE_SIZE
   }
+}).single("media");
 
-  console.log(media.reviewHisotry);
+// Generate model fileds
+function createFields(name, size, type, path) {
+  return { name, size, type, path };
+}
 
-  media
-    .save()
-    .then(() => {
-      return res.status(201).json({
-        success: true,
-        id: media._id,
-        message: 'media created!',
-      });
-    })
-    .catch(err => {
+/**
+ * 
+ * TODO delete a uploaded file when inserting a document into MongoDB failed
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ */
+const uploadMedia = (req, res) => {
+  upload(req, res, (err) => {
+    const file = req.file;
+
+    if (!file) {
       return res.status(400).json({
-        err,
-        message: 'media not created!',
+        success: false,
+        error: `No file provided!`,
       });
-    });
+    }
+
+    const body = createFields(
+      file.originalname,
+      file.size,
+      file.mimetype.split('\/')[0], // TODO what type should it be
+      file.path
+    );
+
+    const media = new Media(body);
+
+    if (!media) {
+      // delete uploaded file
+      return res.status(400).json({
+        success: false,
+        error: err
+      });
+    }
+
+    media
+      .save()
+      .then(() => {
+        return res.status(201).json({
+          success: true,
+          id: media._id,
+          file: file,
+          message: 'media uploaded & MongoDB document created!',
+        });
+      })
+      .catch(err => {
+        // delete uploaded file
+        return res.status(400).json({
+          err,
+          message: 'media not created!',
+        });
+      });
+
+  });
 };
 
 const updateMedia = async (req, res) => {
@@ -59,7 +117,6 @@ const updateMedia = async (req, res) => {
     media.size = body.size;
     media.type = body.type;
     media.path = body.path;
-    //media.reviewHisotry = body.reviewHisotry;
 
     media
       .save()
@@ -128,7 +185,7 @@ const getAllMedia = async (req, res) => {
 };
 
 export default {
-  createMedia,
+  uploadMedia,
   updateMedia,
   deleteMedia,
   getAllMedia,

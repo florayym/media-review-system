@@ -6,13 +6,11 @@ import Links from './Links'
 
 const Container = styled.div.attrs({
   className: 'container',
-})`
-`
+})``
 
 const Nav = styled.nav.attrs({
   className: 'navbar navbar-expand-lg navbar-dark bg-dark',
-})`
-`
+})``
 
 class NavBar extends Component {
   render() {

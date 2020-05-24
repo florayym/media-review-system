@@ -1,15 +1,10 @@
-import React, { Component } from 'react'
-import SeDashboardComponent from '../components/senior_dashboard/SeDashboard'
+import React from 'react';
+import SeDashboardComponent from '../components/senior_dashboard/SeDashboard';
 
-
-class SeniorDashboard extends Component {
-  render() {
-    return (
-      <div>
-        <SeDashboardComponent />
-      </div>
-    );
-  }
+export default function SeDashboardPage() {
+  return (
+    <div>
+      <SeDashboardComponent />
+    </div>
+  );
 }
-
-export default SeniorDashboard;

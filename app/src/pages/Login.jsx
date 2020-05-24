@@ -18,7 +18,6 @@ const authenticate = async (inputs, cb) => {
   //     }
   //   );
 
-  // using post login
   await api.reviewerLogin(inputs)
     .then(res => {
       if (res.status === 200) {
@@ -35,7 +34,7 @@ const authenticate = async (inputs, cb) => {
 
 };
 
-export default () => {
+export default function Login() {
 
   let history = useHistory(); // to access history
 
@@ -65,5 +64,5 @@ export default () => {
         {JSON.stringify(this.state.fields, null, 2)}
       </p> */}
     </div>
-  )
-};
+  );
+}

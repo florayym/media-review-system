@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -28,7 +28,7 @@ function Copyright() {
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
       <Link color="inherit" href="https://github.com/florayym">
-        媒体资料审核
+        媒体资料管理
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -119,7 +119,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SeDashboard() {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = useState(true);
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -131,7 +131,12 @@ export default function SeDashboard() {
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
+      <AppBar
+        position="absolute"
+        className={clsx(classes.appBar, open && classes.appBarShift)}
+        // color="primary"
+        color="default"
+      >
         <Toolbar className={classes.toolbar}>
           <IconButton
             edge="start"

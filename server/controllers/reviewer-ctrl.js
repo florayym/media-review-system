@@ -38,8 +38,8 @@ const getReviewerById = async (req, res) => {
         .json({ success: false, error: `Reviewer not found.` });
     }
     return res
-    .status(200)
-    .json({ success: true, data: reviewer })
+      .status(200)
+      .json({ success: true, data: reviewer })
   }).catch(err => console.log(err));
 };
 

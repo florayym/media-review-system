@@ -1,5 +1,4 @@
-import React, { Component } from 'react'
-import '../css/App.css';
+import React from 'react'
 import bg_img from '../img/Loneliness_in_the_park.jpg';
 import { NavBar } from '../components';
 import styled from 'styled-components'
@@ -35,7 +34,7 @@ function Copyright() {
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
       <Link color="inherit" href="https://github.com/florayym">
-        媒体资料审核
+        媒体资料管理
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -43,31 +42,24 @@ function Copyright() {
   );
 }
 
-class Home extends Component {
-  render() {
-    return (
-      <div>
+export default function Home() {
+  return (
+    <div>
+      <NavBar />
 
-        <NavBar />
+      <Wrapper id="Welcode-wrapper">
+        <StyledBackground id="Background">
+          <StyledHeader id="Header">
+            <h1>
+              欢迎来到媒体资料在线管理与审核系统！
+            </h1>
+          </StyledHeader>
+        </StyledBackground>
+      </Wrapper>
 
-        <Wrapper id="Welcode-wrapper">
-
-          <StyledBackground id="Background">
-            {/* <img src={logo} className="App-logo" ="logo" /> */}
-
-            <StyledHeader id="Header">
-              <h1>
-                欢迎来到多媒体资料在线审核系统！
-              </h1>
-            </StyledHeader>
-          </StyledBackground>
-        </Wrapper>
-        <Box mt={8}>
-          <Copyright />
-        </Box>
-      </div>
-    )
-  }
+      <Box mt={8}>
+        <Copyright />
+      </Box>
+    </div>
+  );
 }
-
-export default Home;

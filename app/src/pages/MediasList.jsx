@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import ReactTable from 'react-table'
+// import ReactTable from 'react-table'
 import api from '../api'
 
 import styled from 'styled-components'
@@ -158,16 +158,6 @@ class MediasList extends Component {
 
     return (
       <Wrapper>
-        {showTable && (
-          <ReactTable
-            data={medias}
-            columns={columns}
-            loading={isLoading}
-            defaultPageSize={10}
-            showPageSizeOptions={true}
-            minRows={0}
-          />
-        )}
       </Wrapper>
     )
   }

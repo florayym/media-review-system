@@ -2,7 +2,11 @@ import React from 'react';
 import '../css/App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
-import { MediasList, MediasInsert, MediasUpdate, Home, Login, Upload, SeniorDashboard, Dashboard } from '../pages';
+import {
+  MediasList, MediasInsert, MediasUpdate,
+  Home, Login, UploadPage, SeniorDashboard, Dashboard,
+  GalleryPage
+} from '../pages';
 import decode from 'jwt-decode';
 
 /************* For other auth *************/
@@ -106,10 +110,10 @@ const App = () => {
           <AuthRoute path="/dashboard" exact component={Dashboard} />
           <Route path="/auth/login" exact component={Login} />
 
-          <Route path="/upload" exact component={Upload} />
+          <Route path="/gallery" exact component={GalleryPage} />
+          <Route path="/upload" exact component={UploadPage} />
 
           {/* <Route path="/medias/list" exact component={MyTable} /> */}
-
           <Route path="/medias/list" exact component={MediasList} />
           <Route path="/medias/create" exact component={MediasInsert} />
           <Route path="/medias/update/:id" exact component={MediasUpdate} />

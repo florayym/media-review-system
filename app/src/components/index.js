@@ -5,8 +5,9 @@ import NavBar from './NavBar';
 import LoginForm from './LoginForm';
 
 // import MyTable from './MyTable';
+import SignIn from './SignIn';
 import Dashboard from './dashboard/Dashboard';
 import SeDashboard from './senior_dashboard/SeDashboard';
-import SignIn from './SignIn';
+import Upload from './upload/Upload';
 
-export { Links, Logo, NavBar, LoginForm, SeDashboard, SignIn, Dashboard };
+export { Links, Logo, NavBar, LoginForm, SeDashboard, SignIn, Dashboard, Upload };

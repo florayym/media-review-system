@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -16,14 +16,12 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
-import { useState } from 'react';
-
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
       <Link color="inherit" href="https://github.com/florayym">
-        媒体资料审核
+        媒体资料管理
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -80,14 +78,17 @@ export default function SignIn(props) {
     if (ID === '') {
       setIDError('工号不可为空！');
     }
+
     if (password === '') {
       setPasswordError('密码不可为空！');
     } else if (ID !== '') {
+
       props.onSubmit({
         "ID": ID,
         "password": password,
         "type": type
       });
+
       setID('');
       setPassword('');
       setType('junior');
@@ -147,9 +148,9 @@ export default function SignIn(props) {
             variant="contained"
             color="primary"
             className={classes.submit}
-            onClick={(e) => handleSubmit(e)}
+            onClick={handleSubmit}
           >
-            登   录
+            登 录
           </Button>
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}

@@ -1,6 +1,8 @@
 # Node.
 node_modules
 
+uploads
+
 # VS Code.
 .vscode
 
