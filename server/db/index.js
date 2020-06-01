@@ -14,8 +14,6 @@ mongoose
 
 const db = mongoose.connection;
 
-// db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-
 db.once('open', function () {
   // Once our connection opens, our callback will be called
   console.log("MongoDB database connection established successfully");

@@ -27,6 +27,7 @@ import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 
 import api from '../../api';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
 
 function preventDefault(event) {
   event.preventDefault();
@@ -176,7 +177,7 @@ const EnhancedTableToolbar = (props) => {
       {numSelected > 0 ? (
         <Tooltip title="Delete">
           <IconButton aria-label="delete">
-            <DeleteIcon />
+            <AddCircleIcon />
           </IconButton>
         </Tooltip>
       ) : (

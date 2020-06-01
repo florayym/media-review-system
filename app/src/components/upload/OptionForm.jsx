@@ -33,7 +33,7 @@ export default function OptionForm(props) {
             onSelectType={type => onSelectType(type)}
           />
         </Grid>
-        {type === 'tb_media' ? (
+        {type === 'audio/*, video/*' ? (
           <Grid item xs={12}>
             <FormatSelector
               default_format={props.default_format}
@@ -42,7 +42,7 @@ export default function OptionForm(props) {
           </Grid>
         ) : null}
 
-        <Grid item xs={12} sm={6}>
+        {/* <Grid item xs={12} sm={6}>
           <TextField
             required
             id="firstName"
@@ -71,7 +71,7 @@ export default function OptionForm(props) {
             fullWidth
             autoComplete="billing address-line1"
           />
-        </Grid>
+        </Grid> */}
       </Grid>
     </Fragment>
   );

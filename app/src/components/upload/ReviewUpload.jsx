@@ -51,9 +51,6 @@ export default function ReviewUpload(props) {
     onUploadProgress: progressEvent => {
       setUploadPercentage(parseInt(Math.round(
         progressEvent.loaded * 100 / progressEvent.total)));
-
-      // Clear percentage
-      setTimeout(() => setUploadPercentage(0), 600000);
     }
   };
 
@@ -86,20 +83,6 @@ export default function ReviewUpload(props) {
 
   return (
     <Fragment>
-      {/* <List disablePadding>
-        {products.map((product) => (
-          <ListItem className={classes.listItem} key={product.name}>
-            <ListItemText primary={product.name} secondary={product.desc} />
-            <Typography variant="body2">{product.price}</Typography>
-          </ListItem>
-        ))}
-        <ListItem className={classes.listItem}>
-          <ListItemText primary="上传文件" />
-          <Typography variant="subtitle1" className={classes.total}>
-            {file}
-          </Typography>
-        </ListItem>
-      </List> */}
       {/* 信息展示 */}
       <List disablePadding>
         <ListItem className={classes.listItem}>
@@ -125,7 +108,7 @@ export default function ReviewUpload(props) {
         {/* 文件上传 */}
         <form className={classes.form} encType="multipart/form-data">
           <Grid item xs={12}>
-            <UploadButton onSelectFile={file => onSelectFile(file)} />
+            <UploadButton onSelectFile={file => onSelectFile(file)} accept={props.type} />
           </Grid>
           <Grid item xs={12}>
             <Button

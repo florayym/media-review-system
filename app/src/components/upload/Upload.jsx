@@ -107,7 +107,7 @@ export default function Upload() {
 
   const handleNext = () => {
     if (activeStep === 0) {
-      if (type === "" || type === "tb_media" && format === "N/A") {
+      if (type === "" || (type === "audio/*, video/*" && format === "N/A")) {
         alert("选项均不可为空！");
         return;
       }
@@ -150,8 +150,7 @@ export default function Upload() {
                   上传成功！
                 </Typography>
                 <Typography variant="subtitle1">
-                  Your order number is #2001539. We have emailed your order confirmation, and will
-                  send you an update when your order has shipped.回到gallery页面看看其它视频吧
+                  回到<a href='/gallery'>Gallery</a>页面看看其它视频吧
                 </Typography>
               </Fragment>
             ) : (

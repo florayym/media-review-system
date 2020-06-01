@@ -52,11 +52,11 @@ export default function FormatSelect(props) {
           onChange={handleChange}
           required
         >
-          <MenuItem value={"N/A"}><em>should have a default format here</em></MenuItem>
-          <MenuItem value={"todo"}>TODO</MenuItem>
-          <MenuItem value={"todo"}>TODO</MenuItem>
-          <MenuItem value={"todo"}>TODO</MenuItem>
-          <MenuItem value={"todo"}>TODO</MenuItem>
+          <MenuItem value={"N/A"}><em>None</em></MenuItem>
+          <MenuItem value={"964"}>964</MenuItem>
+          <MenuItem value={"1800"}>1800</MenuItem>
+          <MenuItem value={"3500"}>3500</MenuItem>
+          <MenuItem value={"3856"}>3856</MenuItem>
         </Select>
       </FormControl>
     </div>

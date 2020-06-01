@@ -3,6 +3,8 @@
  */
 import Media from '../models/media.js';
 import multer from 'multer';
+import MAX_FILE_SIZE from '../config.js';
+
 
 /**
 const path = require("path");
@@ -10,7 +12,6 @@ path.extname(file.originalname))
 
  */
 
-const MAX_FILE_SIZE = 500 * 1024 * 1024;
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, './uploads'),

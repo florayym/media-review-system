@@ -54,16 +54,16 @@ export default function FileTypeSelect(props) {
           onClose={handleClose}
           onOpen={handleOpen}
           value={type}
-          onClick={handleClick}
           onChange={handleChange}
           required
+          onClick={handleClick}
           ref={selectInput}
         >
           <MenuItem value={""}><em>None</em></MenuItem>
-          <MenuItem value={"tb_media"}>视音频</MenuItem>
-          <MenuItem value={"img"}>图片</MenuItem>
-          <MenuItem value={"pdf"}>PDF文件</MenuItem>
-          <MenuItem value={"office"}>Office文件</MenuItem>
+          <MenuItem value={"audio/*, video/*"}>视音频</MenuItem>
+          <MenuItem value={"image/*"}>图片</MenuItem>
+          <MenuItem value={".pdf"}>PDF文件</MenuItem>
+          <MenuItem value={".doc, .docx, .xls, .xlsx, .ppt, .pptx"}>Office文件</MenuItem>
         </Select>
       </FormControl>
     </div>

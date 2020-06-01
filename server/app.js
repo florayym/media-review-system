@@ -10,12 +10,10 @@ import indexRouter from './routes/index.js';
 import reviewersRouter from './routes/reviewer.js';
 import mediaRouter from './routes/media.js';
 import historyRouter from './routes/history.js';
-//import downloadRouter from './routes/download.js';
 
 import db from './db/index.js';
 
 const app = express();
-
 
 // view engine setup
 const __dirname = path.resolve(path.dirname(''));
@@ -39,9 +37,6 @@ app.use('/api/reviewers', reviewersRouter);
 app.use('/api/media', mediaRouter);
 
 app.use('/api/secure/history', historyRouter); // withAuth, 
-
-//app.use('/api/download', downloadRouter);
-
 
 // Authentication: secure route: /api/secure
 // using authentication middleware

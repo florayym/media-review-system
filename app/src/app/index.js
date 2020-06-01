@@ -7,6 +7,7 @@ import {
   Home, Login, UploadPage, SeniorDashboard, Dashboard,
   GalleryPage
 } from '../pages';
+
 import decode from 'jwt-decode';
 
 /************* For other auth *************/
