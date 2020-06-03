@@ -270,9 +270,9 @@ export default function EnhancedReviewerInfoTable() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   useEffect(() => {
-
     const fetchReviewers = async () => {
-      await api.getAllReviewers()
+      await api
+        .getAllReviewers()
         .then(res => setReviewerInfo(res.data.data))
         .catch(err => console.log(err));
     };
@@ -281,23 +281,20 @@ export default function EnhancedReviewerInfoTable() {
   }, []);
 
   useEffect(() => {
-
     const fetchHistory = async (id) => {
-      api.getHistoryByReviewerId(id)
+      api
+        .getHistoryByReviewerId(id)
         .then(res => setReviewers(prevHistory => ([
           ...prevHistory, createData(id, 0, res.data.data)])))
         .catch(err => console.log(err));
     };
 
-    reviewerInfo.forEach(reviewer => {
-      fetchHistory(reviewer.ID);
-    })
+    reviewerInfo.forEach(reviewer => fetchHistory(reviewer.ID));
 
   }, [reviewerInfo]);
   // If dependencies present, effect will only activate if the values in the list change.
 
   useEffect(() => {
-
     const calculateStat = async (reviewer, id) => {
       let acceptNum = 0;
       let rejectNum = 0;
@@ -509,13 +506,6 @@ export default function EnhancedReviewerInfoTable() {
           )}
         </TableBody>
       </Table>
-      {/*
-      <div className={classes.seeMore}>
-        <Link color="primary" href="#" onClick={preventDefault}>
-          See more orders
-        </Link>
-      </div>
-      */}
       <TablePagination
         rowsPerPageOptions={[5, 10, 25]}
         component="div"

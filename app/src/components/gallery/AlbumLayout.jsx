@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import CameraIcon from '@material-ui/icons/PhotoCamera';
@@ -15,16 +15,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
 
-import api from '../api';
-
-const names = [
-  '2_2递归_小游戏',
-  '6_1深度优先搜索_Sudoku',
-  '1_3枚举_讨厌的青蛙',
-  '4_1动态规划_最长上升子序列',
-  '3_2动态规划_几个例题',
-  '2_3递归_棋盘分割'
-]
+import Modal from '@material-ui/core/Modal';
+import api from '../../api';
 
 function Copyright() {
   return (
@@ -37,6 +29,17 @@ function Copyright() {
       {'.'}
     </Typography>
   );
+}
+
+function getModalStyle() {
+  const top = 50;
+  const left = 50;
+
+  return {
+    top: `${top}%`,
+    left: `${left}%`,
+    transform: `translate(-0%, -0%)`,
+  };
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -69,30 +72,118 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.paper,
     padding: theme.spacing(6),
   },
+  paper: {
+    position: 'absolute',
+    width: 400,
+    backgroundColor: theme.palette.background.paper,
+    border: '2px solid #000',
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+  },
 }));
-
-const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9]; // card number = 9
 
 export default function Album(props) {
   const classes = useStyles();
+  const [modalStyle] = React.useState(getModalStyle);
+  const [openIndex, setOpenIndex] = useState("NO");
+  const [mediaList, setMediaList] = useState([]);
+  const [blobs, setBlobs] = useState([]);
+  const [previewBlob, setPreviewBlob] = useState("");
+
+  useEffect(() => {
+    const getMediaList = async () => {
+      await api
+        .getAllTBMedia()
+        .then(res => setMediaList(res.data.data))
+        .catch(err => console.log(err));
+    };
+
+    getMediaList();
+  }, [])
+
+  // get thumbnails one at a time (tb_media / documents)
+  useEffect(() => {
+    const getCardThumbnail = async (id) => {
+      await api
+        .getThumbnail(id, { responseType: 'blob' })
+        .then(res => {
+          const blob = new Blob([res.data], { type: 'image/*' });
+
+          // Generate the base64 string
+          const reader = new FileReader();
+          reader.readAsDataURL(blob);
+
+          reader.onloadend = function () {
+            const base64blob = reader.result;
+            setBlobs(prevBlobs => ([...prevBlobs, base64blob]));
+
+            // const img = document.createElement('img');
+            // img.src = base64blob;
+            // document.body.appendChild(img);
+          }
+        })
+        .catch(err => console.log(err));
+    };
+
+    mediaList.forEach((media, index) => getCardThumbnail(media._id));
+
+  }, [mediaList]);
+
+  useEffect(() => {
+    const fetchMeida = async (index) => {
+      await api
+        .getMediaFileById(mediaList[index]._id, { responseType: 'blob' })
+        .then(res => {
+          const blob = new Blob([res.data], { type: 'video/*' });
+          const url = window.URL.createObjectURL(blob);
+          setPreviewBlob(url);
+
+          // const reader = new FileReader();
+          // reader.readAsDataURL(blob);
+          // reader.onloadend = () => {
+          //   const result = reader.result;
+
+          //   const video = document.createElement('video');
+          //   video.src = url;
+          //   document.body.appendChild(video);
+          // }
+
+        })
+        .catch(err => console.log(err));
+    };
+
+    if (openIndex !== "NO") {
+      fetchMeida(openIndex);
+    }
+  }, [openIndex]);
 
   const handleWatch = (e) => {
-    console.log(e.target.id);
-    // pop up modal
-  }
+    setOpenIndex(e.target.id.substring(6));
+  };
+
+  const handleClose = () => {
+    setOpenIndex("NO");
+  };
 
   const handleSelectGallery = (e) => {
-    let media = "tb_media";
     if (e.target.id === "1") {
-      media = "documents";
+      props.selectMedia("documents");
     }
-    props.selectMedia(media);
-  }
+  };
+
+  const displayModalBody = (
+    <div style={modalStyle}>
+      <iframe width="1263" height="720" src="./media/videos/1_3枚举_讨厌的青蛙.mp4" frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+      {/* <iframe width="1263" height="720" src={previewBlob} frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe> */}
+      {/* <video width="1263" height="720" src={previewBlob} frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></video> */}
+      {/* <video src={previewBlob}></video> */}
+    </div>
+  );
 
   return (
     <Fragment>
       <CssBaseline />
-      <AppBar position="relative" color="deault">
+      <AppBar position="relative" color="default">
         <Toolbar>
           <CameraIcon className={classes.icon} />
           <Typography variant="h6" color="inherit" noWrap>
@@ -108,9 +199,7 @@ export default function Album(props) {
               过审资源
             </Typography>
             <Typography variant="h5" align="center" color="textSecondary" paragraph>
-              {/* Something short and leading about the collection below—its contents, the creator, etc.
-              Make it short and sweet, but not too short so folks don&apos;t simply skip over it
-              entirely. */}您可以在此浏览已通过审核的媒体资源
+              您可以在此浏览已通过审核的媒体资源
             </Typography>
             <div className={classes.heroButtons}>
               <Grid container spacing={2} justify="center">
@@ -131,12 +220,11 @@ export default function Album(props) {
         <Container className={classes.cardGrid} maxWidth="md">
           {/* End hero unit */}
           <Grid container spacing={4}>
-            {cards.map((card, index) => (
-              <Grid item key={card} xs={12} sm={6} md={4}>
+            {mediaList.map((card, index) => (
+              <Grid item key={card._id} xs={12} sm={6} md={4}>
                 <Card className={classes.card}>
                   <CardActionArea onClick={handleWatch}>
                     <CardMedia
-
                       // ! HTML Event Attributes: w3schools.com/tags/ref_eventattributes.asp
                       // ? By default, we use the combination of a <div> element
                       // and a background image to display the media. 
@@ -145,21 +233,20 @@ export default function Album(props) {
                       // a responsive image. Then use the component propert:
                       // component="img"
                       // height="140"
-
                       className={classes.cardMedia}
                       // image="https://source.unsplash.com/random"
-                      // image="./media/card_image.jpg"
-                      image={`./media/card_image_${index}.png`}
-                      id="mediaID"
-                      title="This is a thumbnail."
+                      // image={`./media/card_pic_${index}.png`}
+                      image={blobs[index]}
+                      id={`media_${index}`}
+                      title={card.name}
                     />
                     <CardContent className={classes.cardContent}>
                       <Typography gutterBottom variant="h5" component="h2">
-                        {names[index]}
-                    </Typography>
+                        {card.name.split('.')[0]}
+                      </Typography>
                       <Typography>
                         点击卡片弹出播放
-                    </Typography>
+                      </Typography>
                     </CardContent>
                   </CardActionArea>
                   {/* <CardActions>
@@ -174,6 +261,14 @@ export default function Album(props) {
               </Grid>
             ))}
           </Grid>
+          <Modal
+            open={openIndex !== "NO"}
+            onClose={handleClose}
+            aria-labelledby="simple-modal-title"
+            aria-describedby="simple-modal-description"
+          >
+            {displayModalBody}
+          </Modal>
         </Container>
       </main>
       {/* Footer */}

@@ -4,17 +4,12 @@
 import Media from '../models/media.js';
 import multer from 'multer';
 import MAX_FILE_SIZE from '../config.js';
+import child from 'child_process';
 
-
-/**
-const path = require("path");
-path.extname(file.originalname))
-
- */
-
+const FILE_PATH = './uploads';
 
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, './uploads'),
+  destination: (req, file, cb) => cb(null, FILE_PATH),
   // filename: (req, file, cb) => cb(null, file.fieldname)
   filename: (req, file, cb) => cb(null, Date.now() + '-' + file.originalname)
 });
@@ -52,6 +47,8 @@ const uploadMedia = (req, res) => {
   upload(req, res, (err) => {
     const file = req.file;
 
+    // TODO: ffmpeg -i inputFile -b:v 64k -vcodec libx264 -s 960x540 outputFile
+
     if (!file) {
       return res.status(400).json({
         success: false,
@@ -74,6 +71,44 @@ const uploadMedia = (req, res) => {
         success: false,
         error: err
       });
+    }
+
+    const thumbnailPath = `${FILE_PATH}/thumbnails/thumbnail_${media._id}.png`;
+
+    if (body.type === "image") {
+      // 调整视频大小的方法，同样适用于调整图像大小
+      // child.exec(`ffmpeg -i ${FILE_PATH}/${file.filename} -vf scale = 320：240 ${FILE_PATH}/thumbnails/thumbnail_${media._id}.png`,
+      //   err => {
+      //     if (err) {
+      //       console.log(err);
+      //     }
+      //   });
+
+      // 添加水印
+      child.exec(`magick convert ${FILE_PATH}/${file.filename} /watermark.png -gravity center -geometry +5+10 -composite ${thumbnailPath}`,
+        err => {
+          if (err) {
+            console.log(err);
+          }
+        })
+    } else if (body.type === "application") {
+
+      // magick convert test.pdf[0] -trim +repage -resize 250x250^ -crop 250x300+0+0 resPDF.png
+      // magick convert test.pdf[0] -thumbnail 140x140 -background white +smush 20 -bordercolor white -border 10 testRes.png
+
+      child.exec(`magick convert ${FILE_PATH}/${file.filename}[0] -trim +repage -resize 250x250^ -crop 250x300+0+0 ${thumbnailPath}`,
+        err => {
+          if (err) {
+            console.log(err);
+          }
+        })
+    } else if (body.type === "video") {
+      child.exec(`ffmpeg -i ${FILE_PATH}/${file.filename} -vframes 1 -an -s 750x425 -ss 1 ${thumbnailPath}`,
+        err => {
+          if (err) {
+            console.log(err);
+          }
+        });
     }
 
     media
@@ -170,8 +205,78 @@ const getMediaById = async (req, res) => {
   }).catch(err => console.log(err));
 };
 
+const getMediaFileById = async (req, res) => { // FILE_PATH id: _id
+
+  await Media.findOne({ _id: req.params.id }, (err, media) => {
+    if (err) {
+      return res
+        .status(400)
+        .json({ success: false, error: err });
+    }
+
+    if (!media) {
+      return res
+        .status(404)
+        .json({ success: false, error: `Media not found` });
+    }
+
+    res.download(media.path, err => {
+      if (err) {
+        return res
+          .status(400)
+          .json({ success: false, error: err });
+      }
+    });
+
+    // return res.status(200).json({ success: true, data: media });
+  }).catch(err => console.log(err));
+
+
+
+};
+
+const getThumbnailById = (req, res) => {
+  res.download(`${FILE_PATH}/thumbnails/thumbnail_${req.params.id}.png`, err => {
+    if (err) {
+      // Handle error, but keep in mind the response may be partially-sent
+      // so check res.headersSent
+      console.log(err);
+    }
+  });
+};
+
 const getAllMedia = async (req, res) => {
   await Media.find({}, (err, medias) => {
+    if (err) {
+      return res.status(400).json({ success: false, error: err });
+    }
+    // anything other than zero and '' will evaluate to true
+    if (!medias.length) {
+      return res
+        .status(404)
+        .json({ success: false, error: `Media not found` });
+    }
+    return res.status(200).json({ success: true, data: medias });
+  }).catch(err => console.log(err));
+};
+
+const getAllDocsMedia = async (req, res) => {
+  await Media.find({ $or: [{ type: "application" }, { type: "image" }] }, (err, medias) => {
+    if (err) {
+      return res.status(400).json({ success: false, error: err });
+    }
+    // anything other than zero and '' will evaluate to true
+    if (!medias.length) {
+      return res
+        .status(404)
+        .json({ success: false, error: `Media not found` });
+    }
+    return res.status(200).json({ success: true, data: medias });
+  }).catch(err => console.log(err));
+};
+
+const getAllTBMedia = async (req, res) => {
+  await Media.find({ $or: [{ type: "video" }, { type: "audio" }] }, (err, medias) => {
     if (err) {
       return res.status(400).json({ success: false, error: err });
     }
@@ -189,6 +294,13 @@ export default {
   uploadMedia,
   updateMedia,
   deleteMedia,
+
   getAllMedia,
+  getAllDocsMedia,
+  getAllTBMedia,
+
   getMediaById,
+
+  getMediaFileById,
+  getThumbnailById,
 };

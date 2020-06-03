@@ -41,7 +41,7 @@ export default function FormatSelect(props) {
         选择所需上传的文件类型
       </Button> */}
       <FormControl className={classes.formControl}>
-        <InputLabel id="demo-controlled-open-select-label">格式参数</InputLabel>
+        <InputLabel id="demo-controlled-open-select-label">码率参数</InputLabel>
         <Select
           labelId="demo-controlled-open-select-label"
           id="demo-controlled-open-select"
@@ -53,6 +53,8 @@ export default function FormatSelect(props) {
           required
         >
           <MenuItem value={"N/A"}><em>None</em></MenuItem>
+          <MenuItem value={"64"}>64</MenuItem>
+          <MenuItem value={"128"}>128</MenuItem>
           <MenuItem value={"964"}>964</MenuItem>
           <MenuItem value={"1800"}>1800</MenuItem>
           <MenuItem value={"3500"}>3500</MenuItem>

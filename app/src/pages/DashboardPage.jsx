@@ -4,7 +4,7 @@ import DashboardComponent from '../components/dashboard/Dashboard';
 export default function DashboardPage() {
   return (
     <div>
-      <DashboardComponent />
+      <DashboardComponent reviewerID={10} />
     </div>
   );
 }

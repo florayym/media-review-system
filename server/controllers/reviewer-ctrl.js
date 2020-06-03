@@ -148,7 +148,7 @@ const reviewerLogin = (req, res) => {
           // Set cookies
           res
             .status(200)
-            // cookie CORS problem ??????
+            // cookie CORS
             .cookie('access-token', token, { httpOnly: true, expires: new Date(Date.now() + 60 * 5) })
             .cookie('refresh-token', refreshToken, { httpOnly: true, expires: new Date(Date.now() + 60 * 60 * 24 * 7) })
             .json({

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -21,12 +21,14 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import { mainListItems, secondaryListItems } from './listItems';
 import Chart from './Chart';
 import Deposits from './Deposits';
-import Orders from './Orders';
+import ReviewTable from './ReviewTable';
 
 import ReviewTBMedia from './ReviewTBMedia';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { Button } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
+
+import api from '../../api';
 
 function Copyright() {
   return (
@@ -122,16 +124,38 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Dashboard() {
+export default function Dashboard(props) {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = useState(false);
+  const [reviewSrc, setReviewSrc] = useState("./media/videos/1_3枚举_讨厌的青蛙.mp4");
+  const [description, setDescription] = useState("");
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+
+  const handleNext = () => {
+    setReviewSrc("./media/videos/6_1深度优先搜索_Sudoku.mp4")
+  };
+
+  const handleDecision = async (e) => {
+    console.log(e.target.id);
+    await api
+      .updateHistory("5ebf60645b666c416c36fd23", props.reviewerID, { // reviewerID=10
+        mediaID: "5ebf60645b666c416c36fd23",
+        reviewerID: props.reviewerID,
+        description: description,
+        decision: e.target.id,
+        date: Date.now()
+      })
+      .then(res => console.log(res.data.data))
+      .catch(err => console.log(err));
+  }
 
   return (
     <div className={classes.root}>
@@ -148,7 +172,7 @@ export default function Dashboard() {
             <MenuIcon />
           </IconButton>
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            Dashboard
+            Junior Dashboard
           </Typography>
           <IconButton color="inherit">
             <Badge badgeContent={4} color="secondary">
@@ -179,21 +203,21 @@ export default function Dashboard() {
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
             {/* Chart */}
-            <Grid item xs={12} md={8} lg={9}>
+            <Grid item xs={12}>
               <Paper className={fixedHeightPaper}>
                 <Chart />
               </Paper>
             </Grid>
             {/* Recent Deposits */}
-            <Grid item xs={12} md={4} lg={3}>
+            {/* <Grid item xs={12} md={4} lg={3}>
               <Paper className={fixedHeightPaper}>
                 <Deposits />
               </Paper>
-            </Grid>
-            {/* Recent Orders */}
+            </Grid> */}
+            {/* reviews */}
             <Grid item xs={12}>
               <Paper className={classes.paper}>
-                <Orders />
+                <ReviewTable reviewerID={props.reviewerID} />
               </Paper>
             </Grid>
             <Grid item xs={12}>
@@ -203,7 +227,7 @@ export default function Dashboard() {
 
                 {/* <video src="./小型北斗II卫星观测站.mp4" autoplay height="300" width="400" controls codecs="avc1.42E01E, mp4a.40.2" /> */}
                 {/* <video src="D:\Downloads\d5a0ecda-4f3b-469b-8a04-95321c2875d2.mp3" autoPlay height="300" width="400" controls> */}
-                <video src="./media/videos/2_3递归_棋盘分割.mp4" autoPlay height="250" width="300" controls>
+                <video src={reviewSrc} autoPlay height="250" width="300" controls>
                 </video>
               </div>
             </Grid>
@@ -217,11 +241,18 @@ export default function Dashboard() {
                 }}
               />
             </Grid>
-            <Grid><Button type="button" >通过</Button></Grid>
-            <Grid><Button type="button" >不通过</Button></Grid>
-            <Grid><Button type="button" >下一个</Button></Grid>
+            <Grid><Button id="accepted" type="button" onClick={handleDecision} >通过</Button></Grid>
+            <Grid><Button id="rejected" type="button" onClick={handleDecision} >不通过</Button></Grid>
+            <Grid><Button type="button" onClick={handleNext} >下一个</Button></Grid>
             <Grid>
-              <TextField id="outlined-basic" label="描述" variant="outlined" />
+              <TextField
+                id="outlined-basic"
+                label="描述"
+                variant="outlined"
+                onChange={e => setDescription(e.target.value)}
+              >
+                {description}
+              </TextField>
             </Grid>
           </Grid>
           <Box pt={4}>

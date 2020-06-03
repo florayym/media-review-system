@@ -51,7 +51,7 @@ export default new mongoose.Schema({
   },
   type: {
     type: String,
-    enum: ['video', 'audio', 'image', 'document'],
+    enum: ['video', 'audio', 'image', 'application'],
     required: true
   },
   path: { // name+path=identifier & identifier should be unique.

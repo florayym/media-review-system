@@ -22,6 +22,7 @@ import { mainListItems, secondaryListItems } from './listItems';
 import Chart from './Chart';
 import Deposits from './Deposits';
 import Reviewers from './Reviewers';
+import ResourceTable from './ResourceTable';
 
 function Copyright() {
   return (
@@ -119,7 +120,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SeDashboard() {
   const classes = useStyles();
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -179,22 +180,31 @@ export default function SeDashboard() {
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
             {/* Chart */}
-            <Grid item xs={12} md={8} lg={9}>
+            {/* <Grid item xs={12} md={8} lg={9}>
+              <Paper className={fixedHeightPaper}>
+                <Chart />
+              </Paper>
+            </Grid> */}
+            <Grid item xs={12}>
               <Paper className={fixedHeightPaper}>
                 <Chart />
               </Paper>
             </Grid>
             {/* Recent Deposits */}
-            <Grid item xs={12} md={4} lg={3}>
+            {/* <Grid item xs={12} md={4} lg={3}>
               <Paper className={fixedHeightPaper}>
                 <Deposits />
               </Paper>
-            </Grid>
+            </Grid> */}
             {/* Reviewer Management */}
             <Grid item xs={12}>
               <Paper className={classes.paper}>
-                {/* Table */}
                 <Reviewers />
+              </Paper>
+            </Grid>
+            <Grid item xs={12}>
+              <Paper className={classes.paper}>
+                <ResourceTable />
               </Paper>
             </Grid>
           </Grid>

@@ -110,9 +110,57 @@ const addHistory = (req, res) => {
     });
 };
 
+const updateHistory = (req, res) => {
+  const body = req.body;
+
+  if (!body) {
+    return res.status(400).json({
+      success: false,
+      error: `You must provide a body to update`,
+    });
+  }
+
+  History.findOne({
+    $and: [
+      { mediaID: req.params.mediaID },
+      { reviewerID: req.params.reviewerID }
+    ]
+  },
+    (err, history) => { // { name: req.params.id }
+      if (err) {
+        return res.status(404).json({
+          err,
+          message: 'History not found!',
+        });
+      }
+      history.mediaID = body.mediaID;
+      history.reviewerID = body.reviewerID;
+      history.decision = body.decision;
+      history.description = body.description;
+      history.date = body.date; // ??? 自动更新？？？
+
+      history
+        .save()
+        .then(() => {
+          return res.status(200).json({
+            success: true,
+            id: history._id,
+            message: 'History updated!',
+          });
+        })
+        .catch(error => {
+          return res.status(404).json({
+            error,
+            message: 'History not updated!',
+          });
+        });
+    })
+};
+
 export default {
   getHistoryByMediaId,
   getHistoryByReviewerId,
   getHistory,
-  addHistory
+  addHistory,
+  updateHistory
 };

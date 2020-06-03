@@ -7,6 +7,7 @@ const router = express.Router();
 router.get('/media/:id', history_ctrl.getHistoryByMediaId);
 router.get('/reviewer/:id', history_ctrl.getHistoryByReviewerId);
 router.get('/all', history_ctrl.getHistory);
-router.post('/add', history_ctrl.addHistory);
+router.post('/', history_ctrl.addHistory);
+router.put('/:mediaID/:reviewerID', history_ctrl.updateHistory);
 
 export default router;

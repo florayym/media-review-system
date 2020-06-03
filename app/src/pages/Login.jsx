@@ -57,9 +57,7 @@ export default function Login() {
 
   return (
     <div>
-      {/* <LoginForm onSubmit={fields => this.onSubmit(fields)} /> */}
       <SignIn onSubmit={inputs => onSubmit(inputs)} />
-
       {/* <p>
         {JSON.stringify(this.state.fields, null, 2)}
       </p> */}

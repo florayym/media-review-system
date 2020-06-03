@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import CameraIcon from '@material-ui/icons/PhotoCamera';
@@ -15,7 +15,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
 
-import api from '../api';
+import Modal from '@material-ui/core/Modal';
+import api from '../../api';
+import { Document, Page, pdfjs } from 'react-pdf';
+// const pdfjsVersion = "2.0.305";
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 const names = [
   '小树林',
@@ -38,6 +42,17 @@ function Copyright() {
       {'.'}
     </Typography>
   );
+}
+
+function getModalStyle() {
+  const top = 50;
+  const left = 50;
+
+  return {
+    top: `${top}%`,
+    left: `${left}%`,
+    transform: `translate(-0%, -0%)`,
+  };
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -70,30 +85,110 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.paper,
     padding: theme.spacing(6),
   },
+  paper: {
+    position: 'absolute',
+    width: 400,
+    backgroundColor: theme.palette.background.paper,
+    border: '2px solid #000',
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+  },
 }));
-
-const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9]; // card number = 9
 
 export default function Album2(props) {
   const classes = useStyles();
+  const [modalStyle] = React.useState(getModalStyle);
+  const [openIndex, setOpenIndex] = useState("NO");
+  const [mediaList, setMediaList] = useState([]);
+  const [blobs, setBlobs] = useState([]);
+  const [previewBlob, setPreviewBlob] = useState("");
+  const [numPages, setNumPages] = useState(null);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [openType, setOpenType] = useState("");
+
+  useEffect(() => {
+    const getDocMediaList = async () => {
+      await api
+        .getAllDocsMedia()
+        .then(res => setMediaList(res.data.data))
+        .catch(err => console.log(err));
+    };
+
+    getDocMediaList();
+  }, [])
+
+  // get thumbnails one at a time (tb_media / documents)
+  useEffect(() => {
+    const getCardThumbnail = async (id) => {
+      await api
+        .getThumbnail(id, { responseType: 'blob' })
+        .then(res => {
+          const blob = new Blob([res.data], { type: 'image/*' });
+
+          // Generate the base64 string
+          const reader = new FileReader();
+          reader.readAsDataURL(blob);
+
+          reader.onloadend = function () {
+            const base64blob = reader.result;
+            setBlobs(prevBlobs => ([...prevBlobs, base64blob]));
+
+            // const img = document.createElement('img');
+            // img.src = base64blob;
+            // document.body.appendChild(img);
+          }
+        })
+        .catch(err => console.log(err));
+    };
+
+    mediaList.forEach(media => getCardThumbnail(media._id));
+
+  }, [mediaList]);
 
   const handleWatch = (e) => {
-    console.log(e.target.id);
-    // pop up modal
-  }
+    setOpenIndex(e.target.id.substring(6));
+    setOpenType(e.target.type);
+  };
+
+  const handleClose = () => {
+    setOpenIndex("NO");
+  };
 
   const handleSelectGallery = (e) => {
-    let media = "tb_media";
-    if (e.target.id === "1") {
-      media = "documents";
+    if (e.target.id === "0") {
+      props.selectMedia("tb_media");
     }
-    props.selectMedia(media);
   }
+
+  const onDocumentLoadSuccess = ({ numPages }) => {
+    setNumPages(numPages);
+  }
+
+  const displayPDFModal = (
+    <div style={modalStyle}>
+      {/* <iframe width="1263" height="720" src="./media/videos/1_3枚举_讨厌的青蛙.mp4" frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe> */}
+      <Document
+        file="/media/pdftest.pdf"
+        onLoadSuccess={onDocumentLoadSuccess}
+        onLoadError={console.error}
+      >
+        <Page pageNumber={pageNumber} />
+      </Document>
+      <p>Page {pageNumber} of {numPages}</p>
+    </div>
+  );
+
+  const displayPicModal = (
+    <div style={modalStyle}>
+      {/* <iframe width="1263" height="720" src="./media/videos/1_3枚举_讨厌的青蛙.mp4" frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe> */}
+      <img src={blobs[openIndex]}></img>
+    </div>
+  );
 
   return (
     <Fragment>
       <CssBaseline />
-      <AppBar position="relative" color="deault">
+      <AppBar position="relative" color="default">
         <Toolbar>
           <CameraIcon className={classes.icon} />
           <Typography variant="h6" color="inherit" noWrap>
@@ -132,49 +227,38 @@ export default function Album2(props) {
         <Container className={classes.cardGrid} maxWidth="md">
           {/* End hero unit */}
           <Grid container spacing={4}>
-            {cards.map((card, index) => (
+            {mediaList.map((card, index) => (
               <Grid item key={card} xs={12} sm={6} md={4}>
                 <Card className={classes.card}>
                   <CardActionArea onClick={handleWatch}>
                     <CardMedia
-
-                      // ! HTML Event Attributes: w3schools.com/tags/ref_eventattributes.asp
-                      // ? By default, we use the combination of a <div> element
-                      // and a background image to display the media. 
-                      // It can be problematic in some situations. 
-                      // For instance, you might want to display a video or 
-                      // a responsive image. Then use the component propert:
-                      // component="img"
-                      // height="140"
-
                       className={classes.cardMedia}
-                      // image="https://source.unsplash.com/random"
-                      // image="./media/card_image.jpg"
-                      image={`./media/card_pic_${index}.png`}
-                      id="mediaID"
-                      title="This is a thumbnail."
+                      image={blobs[index]}
+                      id={`media_${index}`}
+                      type={card.type}
+                      title={card.name}
                     />
                     <CardContent className={classes.cardContent}>
                       <Typography gutterBottom variant="h5" component="h2">
-                        {names[index]}
+                        {card.name.split('.')[0]}
                       </Typography>
                       <Typography>
                         点击卡片弹出播放
                       </Typography>
                     </CardContent>
                   </CardActionArea>
-                  {/* <CardActions>
-                    <Button size="small" color="primary">
-                      观看链接
-                    </Button>
-                    <Button size="small" color="primary">
-                      Edit
-                    </Button>
-                  </CardActions> */}
                 </Card>
               </Grid>
             ))}
           </Grid>
+          <Modal
+            open={openIndex !== "NO"}
+            onClose={handleClose}
+            aria-labelledby="simple-modal-title"
+            aria-describedby="simple-modal-description"
+          >
+            {openType === "application" ? (displayPDFModal) : (displayPicModal)}
+          </Modal>
         </Container>
       </main>
       {/* Footer */}

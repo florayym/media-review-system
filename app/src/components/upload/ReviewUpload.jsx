@@ -48,7 +48,10 @@ export default function ReviewUpload(props) {
     headers: {
       'content-type': 'multipart/form-data'
     },
+    // `onUploadProgress` allows handling of progress events for uploads
+    // browser only
     onUploadProgress: progressEvent => {
+      // Do whatever you want with the native progress event
       setUploadPercentage(parseInt(Math.round(
         progressEvent.loaded * 100 / progressEvent.total)));
     }
@@ -78,7 +81,6 @@ export default function ReviewUpload(props) {
     // })
     //   .then(res => console.log(res))
     //   .catch(err => console.log(err));
-
   };
 
   return (
