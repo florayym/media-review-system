@@ -11,8 +11,6 @@ export default function ReviewTBMedia() {
       </div>
       <div class="embed-responsive embed-responsive-16by9">
 
-        <video src="./media/小型北斗II卫星观测站.mp4" autoPlay height="300" width="400" controls>
-        </video>
       </div>
     </Fragment>
   );

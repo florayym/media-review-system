@@ -235,7 +235,6 @@ export default function Album(props) {
                       // height="140"
                       className={classes.cardMedia}
                       // image="https://source.unsplash.com/random"
-                      // image={`./media/card_pic_${index}.png`}
                       image={blobs[index]}
                       id={`media_${index}`}
                       title={card.name}

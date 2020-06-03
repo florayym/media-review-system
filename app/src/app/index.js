@@ -114,7 +114,6 @@ const App = () => {
           <Route path="/gallery" exact component={GalleryPage} />
           <Route path="/upload" exact component={UploadPage} />
 
-          {/* <Route path="/medias/list" exact component={MyTable} /> */}
           <Route path="/medias/list" exact component={MediasList} />
           <Route path="/medias/create" exact component={MediasInsert} />
           <Route path="/medias/update/:id" exact component={MediasUpdate} />

@@ -166,7 +166,6 @@ export default function Album2(props) {
 
   const displayPDFModal = (
     <div style={modalStyle}>
-      {/* <iframe width="1263" height="720" src="./media/videos/1_3枚举_讨厌的青蛙.mp4" frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe> */}
       <Document
         file="/media/pdftest.pdf"
         onLoadSuccess={onDocumentLoadSuccess}
@@ -180,7 +179,6 @@ export default function Album2(props) {
 
   const displayPicModal = (
     <div style={modalStyle}>
-      {/* <iframe width="1263" height="720" src="./media/videos/1_3枚举_讨厌的青蛙.mp4" frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe> */}
       <img src={blobs[openIndex]}></img>
     </div>
   );
