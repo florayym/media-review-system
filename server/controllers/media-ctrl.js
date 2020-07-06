@@ -94,7 +94,7 @@ const uploadMedia = (req, res) => {
     } else if (body.type === "application") {
 
       // magick convert test.pdf[0] -trim +repage -resize 250x250^ -crop 250x300+0+0 resPDF.png
-      // magick convert test.pdf[0] -thumbnail 140x140 -background white +smush 20 -bordercolor white -border 10 testRes.png
+      // magick convert test.pdf[0-7] -thumbnail 140x140 -background white +smush 20 -bordercolor white -border 10 testRes.png
 
       child.exec(`magick convert ${FILE_PATH}/${file.filename}[0] -trim +repage -resize 250x250^ -crop 250x300+0+0 ${thumbnailPath}`,
         err => {
