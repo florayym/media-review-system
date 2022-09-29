@@ -25,6 +25,6 @@
     "jsonwebtoken": "^8.5.1",
     "jwt-decode": "^2.2.0",
     "react-pdf": "^4.1.0",
-    "recharts": "^1.8.5"
+    "recharts": "^2.1.14"
   }
 }
